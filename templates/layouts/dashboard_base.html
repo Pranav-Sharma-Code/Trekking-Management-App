@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {% block title %}
+        Dashboard
+        {% endblock %}
+
+    </title>
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Dashboard CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+
+    {% block css %}
+    {% endblock %}
+</head>
+
+<body>
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <h3>🏔 Trekking</h3>
+            </div>
+            <ul>
+                {% if session.get("role")=="Organizer" %}
+                <li>
+                    <a href="/organizer">
+                        <i class="bi bi-house"></i>Dashboard
+                    </a>
+                </li>
+
+                <li>
+                    <a href="/create-trek">
+                        <i class="bi bi-plus-circle"></i>Create Trek
+                    </a>
+                </li>
+
+                <li>
+                    <a href="/my-treks">
+                        <i class="bi bi-map"></i>My Treks
+                    </a>
+                </li>
+
+                <li>
+                    <a href="/logout">
+                        <i class="bi bi-box-arrow-right"></i>Logout
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </aside>
+
+        <!-- Main -->
+
+        <div class="main">
+            <!-- Top Navbar -->
+            <nav class="topbar">
+                <h4>Welcome, {{ session.get("name") }}</h4>
+            </nav>
+
+            <!-- Page Content -->
+            <div class="content">
+                {% block content %}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

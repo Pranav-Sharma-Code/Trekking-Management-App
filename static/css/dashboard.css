@@ -1,0 +1,184 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #eef6ff;
+    color: #1f2937;
+}
+
+.wrapper {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 260px;
+    background: #0f4c81;
+    color: white;
+    padding: 25px 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+}
+
+.logo {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.logo h3 {
+    font-weight: bold;
+}
+
+.sidebar ul {
+    list-style: none;
+}
+
+.sidebar ul li {
+    margin: 8px 15px;
+}
+
+.sidebar ul li a {
+    display: block;
+    text-decoration: none;
+    color: white;
+    padding: 14px 18px;
+    border-radius: 12px;
+    transition: .3s;
+}
+
+.sidebar ul li a:hover {
+    background: #219EBC;
+    color: white;
+}
+
+.sidebar ul li a i {
+    margin-right: 12px;
+}
+
+.main {
+    margin-left: 260px;
+    width: 100%;
+}
+
+.topbar {
+    height: 70px;
+    background: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 30px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .08);
+}
+
+.topbar h4 {
+    margin: 0;
+    font-weight: 600;
+}
+
+.content {
+    padding: 35px;
+}
+
+
+.dashboard-card {
+    background: white;
+    border-radius: 18px;
+    padding: 30px;
+    text-align: center;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, .08);
+    transition: .3s;
+    margin-bottom: 25px;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-5px);
+}
+
+.dashboard-card i {
+    font-size: 45px;
+    color: #219EBC;
+    margin-bottom: 15px;
+}
+
+.dashboard-card h5 {
+    color: #555;
+}
+
+.dashboard-card h2 {
+    margin-top: 10px;
+    color: #0f4c81;
+    font-weight: bold;
+}
+
+.btn-primary {
+    background: #219EBC;
+    border: none;
+}
+
+.btn-primary:hover {
+    background: #126782;
+}
+
+.table {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.table thead {
+    background: #219EBC;
+    color: white;
+}
+
+
+.form-control,
+.form-select {
+    border-radius: 12px;
+    padding: 12px;
+}
+
+@media(max-width:992px) {
+    .sidebar {
+        width: 90px;
+    }
+
+    .sidebar h3 {
+        display: none;
+    }
+
+    .sidebar ul li a {
+        text-align: center;
+        padding: 15px;
+    }
+
+    .sidebar ul li a i {
+        margin: 0;
+        font-size: 22px;
+    }
+
+    .sidebar ul li a {
+        font-size: 0;
+    }
+
+    .main {
+        margin-left: 90px;
+    }
+
+}
+
+@media(max-width:768px) {
+    .sidebar {
+        display: none;
+    }
+
+    .main {
+        margin-left: 0;
+    }
+
+}

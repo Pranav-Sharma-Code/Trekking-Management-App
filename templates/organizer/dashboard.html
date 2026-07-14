@@ -1,8 +1,4 @@
-{% extends "base.html" %}
-
-{% block css %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/organizer.css') }}">
-{% endblock %}
+{% extends "layouts/dashboard_base.html" %}
 
 {% block title %}
 Organizer Dashboard
@@ -10,13 +6,46 @@ Organizer Dashboard
 
 {% block content %}
 
-<h1>Organizer Dashboard</h1>
+<h2 class="mb-4">
 
-<div class="mt-4">
+Organizer Dashboard
 
-    <a href="/create-trek" class="btn btn-primary">Create Trek</a>
+</h2>
 
-    <a href="/my-treks" class="btn btn-success">My Treks</a>
+<div class="row">
+    <div class="col-md-3">
+
+        <div class="dashboard-card">
+            <i class="bi bi-map-fill"></i>
+            <h5>Total Treks</h5>
+            <h2>{{ total_treks }}</h2>
+        </div>
+
+    </div>
+
+    <div class="col-md-3">
+        <div class="dashboard-card">
+            <i class="bi bi-calendar-event"></i>
+            <h5>Upcoming</h5>
+            <h2>{{ upcoming }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="dashboard-card">
+            <i class="bi bi-people-fill"></i>
+            <h5>Participants</h5>
+            <h2>{{ participants }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="dashboard-card">
+            <i class="bi bi-currency-rupee"></i>
+            <h5>Revenue</h5>
+            <h2>₹{{ revenue }}</h2>
+        </div>
+    </div>
 
 </div>
 

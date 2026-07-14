@@ -14,11 +14,17 @@ def dashboard():
     if "user_id" not in session:
         return redirect(url_for("auth.login"))
 
-    if session["role"] != "Organizer":
-        flash("Access Denied","danger")
+    if session.get("role") != "Organizer":
         return redirect("/")
 
-    return render_template("organizer/dashboard.html")
+    total = Trek.query.filter_by(
+        organizer_id=session["user_id"]
+    ).count()
+
+    return render_template(
+        "organizer/dashboard.html", total_treks=total,
+        upcoming=0, participants=0, revenue=0
+    )
 
 @organizer.route("/create-trek", methods=["GET", "POST"])
 @login_required
