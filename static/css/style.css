@@ -1,0 +1,108 @@
+:root{
+    --bg1:#d2daf6;
+    --bg2:#c4cff5;
+    --primary:#00b4d8;
+    --primary-dark:#0077b6;
+    --accent:#90e0ef;
+    --text:#0077b6;
+    --card:#243b55;
+    --inp: #d1daf6;
+    --inp2: #8699d4;
+    --table: white;
+
+}
+
+body{
+    background:linear-gradient(135deg, var(--bg1), var(--bg2));
+    color:var(--text);
+    transition:.4s;
+}
+
+/* Navbar */
+.navbar{
+    background:rgba(9,20,45,.9)!important;
+    backdrop-filter:blur(12px);
+}
+
+/* Brand */
+.navbar-brand{
+    color:var(--accent)!important;
+    font-weight:bold;
+}
+
+/* Links */
+.nav-link{
+    color:white!important;
+}
+
+.nav-link:hover{
+    color:var(--accent)!important;
+}
+
+/* Buttons */
+.btn-primary{
+    background:var(--primary);
+    border:none;
+}
+
+.btn-primary:hover{
+    background:var(--primary-dark);
+}
+
+.btn-success{
+    background:#0096c7;
+    border:none;
+}
+
+.btn-success:hover{
+    background:#0077b6;
+}
+
+/* Cards */
+.card{
+    background:rgba(36,59,85,.8);
+    border:none;
+    border-radius:18px;
+    color:white;
+    backdrop-filter:blur(10px);
+}
+
+/* Input */
+.form-control{
+    background: var(--inp);
+    border:1px solid #284b63;
+    color:white;
+}
+
+.form-control:focus{
+    background: var(--inp2);
+    color:white;
+    border-color:#00b4d8;
+    box-shadow:0 0 10px rgba(0,180,216,.5);
+}
+
+/* Table */
+.table{
+    background-color: var(--table);
+}
+
+/* Select */
+.form-select{
+    background:#16213e;
+    color:white;
+}
+
+
+
+body.dark{
+    --bg1:#020617;
+    --bg2:#0f172a;
+    --primary:#38bdf8;
+    --primary-dark:#0284c7;
+    --accent:#7dd3fc;
+    --text:white;
+    --card:#172554;
+    --inp: #16213e;
+    --inp2: #1f3676;
+    --table: #0e111a;
+}

@@ -1,28 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+
+    <title>
+        {% block title %}
+        Trekking Management System
+        {% endblock %}
+    </title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Global CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <!-- Page Specific CSS -->
+    {% block css %}
+    {% endblock %}
 </head>
+
 <body>
-    <div class="container mt-4">
-        
-        {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-        
-        {% for category, message in messages %}
-        
-        <div class="alert alert-{{category}}">
-            {{message}}
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark shadow-sm">
+        <div class="container">
+
+            <a class="navbar-brand fw-bold" href="/">🏔 Trekking Management</a>
+
+            <button id="theme-toggle" class="btn btn-outline-light">
+                🌙 Dark Mode
+            </button>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+
+                <span class="navbar-toggler-icon"></span>
+
+            </button>
+
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+
+                <ul class="navbar-nav ms-auto">
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">Login</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/register">Register</a>
+                    </li>
+
+                </ul>
+
+            </div>
+
         </div>
-        
+    </nav>
+
+    <!-- Flash Messages -->
+    <div class="container mt-3">
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+
+        {% if messages %}
+
+        {% for category, message in messages %}
+
+        <div class="alert alert-{{ category }} alert-dismissible fade show">
+
+            {{ message }}
+
+            <button class="btn-close" data-bs-dismiss="alert">
+            </button>
+
+        </div>
+
         {% endfor %}
+
         {% endif %}
+
         {% endwith %}
+
+    </div>
+
+    <!-- Main Content -->
+    <main class="container my-5">
+
         {% block content %}
         {% endblock %}
-    
-    </div>
+
+    </main>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Page Specific JS -->
+    {% block js %}
+    {% endblock %}
+
 </body>
+<script>
+    const button = document.getElementById("theme-toggle");
+    button.addEventListener("click", () => {
+        console.log("Button Clicked");
+        document.body.classList.toggle("dark");
+    });
+</script>
+
 </html>

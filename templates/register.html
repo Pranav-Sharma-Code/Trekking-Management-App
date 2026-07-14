@@ -1,31 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    {% extends "base.html" %}
-    
-    {% block content %}
-    <h2>Register</h2>
-    
-    <form method="POST">
-        <input class="form-control mb-3" name="name" placeholder="Name">
-        <input class="form-control mb-3" name="email" placeholder="Email">
-        
-        <input class="form-control mb-3" name="phone" placeholder="Phone">
-        <input class="form-control mb-3" type="password" name="password" placeholder="Password">
-        
-        <select class="form-control mb-3" name="role">
-            <option>Participant</option>
-            <option>Organizer</option>
-        </select>
-        
-        <button class="btn btn-primary">Register</button>
-    </form>
-    <a href="/login">Already have an account?</a>
-    {% endblock %}
-</body>
-</html>
+{% extends "base.html" %}
+{% block content %}
+
+<h2>Register</h2>
+
+<form method="POST">
+
+    <input class="form-control mb-3"
+           name="name" placeholder="Name">
+
+    <input class="form-control mb-3"
+           name="email" placeholder="Email">
+
+    <input class="form-control mb-3"
+           name="phone" placeholder="Phone">
+
+    <input class="form-control mb-3" type="password"
+           name="password" placeholder="Password">
+
+    <select class="form-control mb-3" name="role">
+        <option value="Participant">Participant</option>
+        <option value="Organizer">Organizer</option>
+    </select>
+
+    <button class="btn btn-primary">Register</button>
+
+</form>
+<a href="{{ url_for('auth.login') }}">Already have an account?</a>
+{% endblock %}

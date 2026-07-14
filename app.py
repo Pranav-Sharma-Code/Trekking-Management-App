@@ -1,14 +1,14 @@
 from flask import Flask, render_template
 
 from routes.auth import auth
-
+from routes.organizer import organizer
 from models import db
 from models.user import User
 from models.trek import Trek
 from models.booking import Booking
 
 app = Flask(__name__)
-
+app.register_blueprint(organizer)
 app.secret_key = "code_IIT_prnv"
 
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"

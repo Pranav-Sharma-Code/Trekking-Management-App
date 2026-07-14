@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}
+My Treks
+{% endblock %}
+
+{% block content %}
+
+<h2>My Treks</h2>
+
+<table class="table">
+
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Location</th>
+            <th>Difficulty</th>
+            <th>Capacity</th>
+            <th>Slots</th>
+            <th>Price</th>
+        </tr>
+
+    </thead>
+
+    <tbody>
+        {% for trek in treks %}
+        <tr>
+            <td>{{ trek.title }}</td>
+            <td>{{ trek.location }}</td>
+            <td>{{ trek.difficulty }}</td>
+            <td>{{ trek.capacity }}</td>
+            <td>{{ trek.available_slots }}</td>
+            <td>₹{{ trek.price }}</td>
+        </tr>
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}
