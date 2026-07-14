@@ -1,0 +1,9 @@
+.table{
+    border-radius:12px;
+    overflow:hidden;
+}
+
+.table td,
+.table th{
+    vertical-align:middle;
+}
