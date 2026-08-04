@@ -2,7 +2,7 @@ from flask import Flask, render_template
 from routes.participant import participant
 from flask_migrate import Migrate
 from routes.auth import auth
-from routes.organizer import organizer
+from routes.Trek_staff import organizer
 from models import db
 from werkzeug.security import generate_password_hash
 from models.user import User
@@ -34,8 +34,8 @@ with app.app_context():
             name="Admin",
             email="admin@trek.com",
             phone="9999999999",
-            password=generate_password_hash("admin123")
-            role-"Admin",
+            password=generate_password_hash("admin123"),
+            role="Admin",
             approved=True,
             blacklisted=False
         )

@@ -22,7 +22,7 @@ def register():
         
         hashed_password = generate_password_hash(password)
 
-        approved = False if role == "Organizer" else True
+        approved = False if role == "Trek_staff" else True
         new_user = User(name=name, 
                         email=email, 
                         password=hashed_password, 
@@ -35,7 +35,7 @@ def register():
         db.session.add(new_user)
         db.session.commit()
 
-        if role == "Organizer":
+        if role == "Trek_staff":
             flash(
                 "Registration successful! Please wait for Admin approval.",
                 "warning"
@@ -72,7 +72,7 @@ def login():
             flash("Your account has been blacklisted.", "danger")
             return redirect(url_for("auth.login"))
 
-        if user.role == "Organizer" and not user.approved:
+        if user.role == "Trek_staff" and not user.approved:
             flash("Waiting for Admin Approval.", "warning")
             return redirect(url_for("auth.login"))
 
@@ -86,7 +86,7 @@ def login():
             return redirect(url_for("admin.dashboard"))
 
         elif user.role == "Organizer":
-            return redirect(url_for("organizer.dashboard"))
+            return redirect(url_for("Trek_staff.dashboard"))
 
         elif user.role == "Participant":
             return redirect(url_for("participant.dashboard"))

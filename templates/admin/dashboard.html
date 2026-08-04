@@ -1,1 +1,158 @@
-<h1>Admin Dashboard</h1>
+{% extends "layouts/dashboard_base.html" %}
+
+{% block title %}
+Admin Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="mb-4">
+        <h2 class="fw-bold">
+            Admin Dashboard
+        </h2>
+
+        <p class="text-muted">
+            Welcome {{ session["name"] }}
+        </p>
+    </div>
+
+    <!-- Statistics -->
+
+    <div class="row g-4">
+        <div class="col-lg-3 col-md-6">
+            <div class="card shadow border-0">
+                <div class="card-body text-center">
+                    <h1 class="text-primary">
+                        {{ total_treks }}
+                    </h1>
+                    <h5>Total Treks</h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <div class="card shadow border-0">
+                <div class="card-body text-center">
+                    <h1 class="text-success">
+                        {{ total_users }}
+                    </h1>
+                    <h5>Participants</h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <div class="card shadow border-0">
+                <div class="card-body text-center">
+                    <h1 class="text-warning">
+                        {{ total_organizers }}
+                    </h1>
+                    <h5>Staff</h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <div class="card shadow border-0">
+                <div class="card-body text-center">
+                    <h1 class="text-danger">
+                        {{ pending_organizers }}
+                    </h1>
+                    <h5>Pending Staff</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-lg-12">
+            <div class="card shadow border-0">
+                <div class="card-body text-center">
+                    <h2 class="text-info">
+                        {{ total_bookings }}
+                    </h2>
+
+                    <h5>Total Bookings</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Treks -->
+
+    <div class="card shadow border-0 mt-5">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Recent Treks</h5>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Location</th>
+                        <th>Difficulty</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for trek in recent_treks %}
+
+                    <tr>
+                        <td>{{ trek.id }}</td>
+                        <td>{{ trek.title }}</td>
+                        <td>{{ trek.location }}</td>
+                        <td>{{ trek.difficulty }}</td>
+                        <td>
+                            <span class="badge bg-success">
+                                {{ trek.status }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Recent Bookings -->
+
+    <div class="card shadow border-0 mt-5">
+        <div class="card-header bg-success text-white">
+            <h5 class="mb-0">Recent Bookings</h5>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>User</th>
+                        <th>Trek</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    {% for booking in recent_bookings %}
+
+                    <tr>
+                        <td>{{ booking.id }}</td>
+                        <td>{{ booking.user.name }}</td>
+                        <td>{{ booking.trek.title }}</td>
+                        <td>
+                            <span class="badge bg-primary">
+                                {{ booking.status }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
