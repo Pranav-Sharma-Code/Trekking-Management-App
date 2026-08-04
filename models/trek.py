@@ -5,6 +5,11 @@ class Trek(db.Model):
     __tablename__ = "trek"
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
+    image = db.Column(db.String(255))
+    state = db.Column(db.String(100))
+    duration = db.Column(db.Integer)
+    altitude = db.Column(db.Integer)
+    registration_deadline = db.Column(db.Date)
     location = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text)
     difficulty = db.Column(db.String(20), nullable=False)

@@ -1,29 +1,115 @@
 {% extends "base.html" %}
+
+{% block title %}
+Register
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+{% endblock %}
+
 {% block content %}
 
-<h2>Register</h2>
+<div class="container d-flex justify-content-center align-items-center login-container">
 
-<form method="POST">
+    <div class="login-card">
 
-    <input class="form-control mb-3"
-           name="name" placeholder="Name">
+        <div class="text-center mb-4">
 
-    <input class="form-control mb-3"
-           name="email" placeholder="Email">
+            <h1>🏔</h1>
 
-    <input class="form-control mb-3"
-           name="phone" placeholder="Phone">
+            <h2 class="fw-bold">Create Account</h2>
 
-    <input class="form-control mb-3" type="password"
-           name="password" placeholder="Password">
+            <p class="text-muted">
+                Join the Trekking Management System
+            </p>
 
-    <select class="form-control mb-3" name="role">
-        <option value="Participant">Participant</option>
-        <option value="Organizer">Organizer</option>
-    </select>
+        </div>
 
-    <button class="btn btn-primary">Register</button>
+        <form method="POST">
 
-</form>
-<a href="{{ url_for('auth.login') }}">Already have an account?</a>
+            <div class="mb-3">
+                <label class="form-label">Full Name</label>
+
+                <input
+                    type="text"
+                    name="name"
+                    class="form-control"
+                    placeholder="Enter your full name"
+                    required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+
+                <input
+                    type="email"
+                    name="email"
+                    class="form-control"
+                    placeholder="Enter your email"
+                    required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Phone Number</label>
+
+                <input
+                    type="tel"
+                    name="phone"
+                    class="form-control"
+                    placeholder="Enter your phone number"
+                    maxlength="10"
+                    required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+
+                <input
+                    type="password"
+                    name="password"
+                    class="form-control"
+                    placeholder="Create a password"
+                    required>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">Register As</label>
+
+                <select
+                    name="role"
+                    class="form-select"
+                    required>
+
+                    <option value="">Select Role</option>
+                    <option value="Participant">Participant</option>
+                    <option value="Organizer">Organizer</option>
+
+                </select>
+            </div>
+
+            <button class="btn btn-primary w-100">
+
+                Create Account
+
+            </button>
+
+        </form>
+
+        <hr>
+
+        <p class="text-center mb-0">
+
+            Already have an account?
+
+            <a href="{{ url_for('auth.login') }}">
+                Login Here
+            </a>
+
+        </p>
+
+    </div>
+
+</div>
+
 {% endblock %}

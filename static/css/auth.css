@@ -1,0 +1,54 @@
+/* ==========================
+   Login Page
+========================== */
+
+.login-container{
+
+    min-height:85vh;
+
+}
+
+.login-card{
+
+    width:100%;
+    max-width:450px;
+
+    background:#ffffff;
+
+    padding:40px;
+
+    border-radius:20px;
+
+    box-shadow:0 15px 40px rgba(0,0,0,.12);
+
+}
+
+.login-card h2{
+
+    color:#0f4c81;
+
+}
+
+.login-card .form-control{
+
+    border-radius:12px;
+
+    padding:12px;
+
+}
+
+.login-card .btn{
+
+    border-radius:12px;
+
+    padding:12px;
+
+    font-weight:bold;
+
+}
+
+.login-card a{
+
+    text-decoration:none;
+
+}

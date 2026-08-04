@@ -1,44 +1,93 @@
-{% extends "base.html" %}
+{% extends "layouts/dashboard_base.html" %}
 
 {% block title %}
 Create Trek
 {% endblock %}
 
-{% block css %}
-
-<link rel="stylesheet"
-      href="{{ url_for('static', filename='css/organizer.css') }}">
-
-{% endblock %}
-
 {% block content %}
 
-<h2>Create Trek</h2>
+<div class="container-fluid">
 
-<form method="POST">
+    <div class="card shadow-lg border-0">
+        <div class="card-header bg-primary text-white">
 
-    <input class="form-control mb-3" name="title" placeholder="Trek Title" required>
-    <input class="form-control mb-3" name="location" placeholder="Location" required>
+            <h3 class="mb-1">
+                <i class="bi bi-plus-circle-fill"></i>Create New Trek
+            </h3>
 
-    <textarea class="form-control mb-3" name="description" placeholder="Description"></textarea>
+            <small>Fill in the trek details carefully.</small>
 
-    <select class="form-control mb-3" name="difficulty">
-        <option>Easy</option>
-        <option>Moderate</option>
-        <option>Difficult</option>
-    </select>
+        </div>
 
-    <label>Start Date</label>
-    <input type="date" class="form-control mb-3" name="start_date" required>
+        <div class="card-body">
+            <form method="POST">
+                <div class="row">
+                    <!-- Trek Title -->
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Trek Title</label>
+                        <input type="text" name="title" class="form-control" placeholder="Eg. Kedarkantha Winter Trek"
+                            required>
+                    </div>
 
-    <label>End Date</label>
-    <input type="date" class="form-control mb-3" name="end_date" required>
+                    <!-- Location -->
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Location</label>
+                        <input type="text" name="location" class="form-control" placeholder="Eg. Uttarakhand" required>
+                    </div>
 
-    <input type="number" class="form-control mb-3" name="capacity" placeholder="Capacity" required>
-    <input type="number" class="form-control mb-3" name="price" placeholder="Price" required>
+                    <!-- Difficulty -->
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Difficulty</label>
 
-    <button class="btn btn-primary">Create Trek</button>
+                        <select name="difficulty" class="form-select">
+                            <option value="Easy">Easy</option>
+                            <option value="Moderate">Moderate</option>
+                            <option value="Hard">Hard</option>
+                        </select>
+                    </div>
 
-</form>
+                    <!-- Price -->
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Price (₹)</label>
+                        <input type="number" name="price" class="form-control" placeholder="4500" required>
+                    </div>
+
+                    <!-- Capacity -->
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Capacity</label>
+                        <input type="number" name="capacity" class="form-control" placeholder="30" required>
+                    </div>
+
+                    <!-- Start Date -->
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Start Date</label>
+                        <input type="date" name="start_date" class="form-control" required>
+                    </div>
+
+                    <!-- End Date -->
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">End Date</label>
+                        <input type="date" name="end_date" class="form-control" required>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="col-12 mb-4">
+                        <label class="form-label">Description</label>
+                        <textarea rows="5" name="description" class="form-control"
+                            placeholder="Describe the trek..."></textarea>
+                    </div>
+                </div>
+                <div class="d-flex gap-3">
+                    <button class="btn btn-primary">
+                        <i class="bi bi-check-circle"></i>Create Trek
+                    </button>
+                    <button type="reset" class="btn btn-outline-secondary">Reset</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

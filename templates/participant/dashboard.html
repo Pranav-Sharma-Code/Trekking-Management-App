@@ -1,0 +1,24 @@
+{% extends "layouts/dashboard_base.html" %}
+
+{% block title %}
+Participant Dashboard
+{% endblock %}
+
+{% block content %}
+
+<h2>
+    Welcome
+    {{ session.get("name") }}
+</h2>
+
+<div class="row mt-4">
+    <div class="col-md-4">
+        <div class="dashboard-card">
+            <i class="bi bi-map"></i>
+            <h4>Available Treks</h4>
+            <h1>{{ total_treks }}</h1>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

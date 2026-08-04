@@ -1,5 +1,4 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
-from utils.auth import login_required, organizer_required
 from models import db
 from models.trek import Trek
 from datetime import datetime
@@ -7,8 +6,6 @@ from datetime import datetime
 organizer = Blueprint("organizer", __name__)
 
 @organizer.route("/organizer")
-@login_required
-@organizer_required
 def dashboard():
 
     if "user_id" not in session:
@@ -27,8 +24,6 @@ def dashboard():
     )
 
 @organizer.route("/create-trek", methods=["GET", "POST"])
-@login_required
-@organizer_required
 def create_trek():
 
     if "user_id" not in session:
@@ -56,8 +51,6 @@ def create_trek():
     return render_template("organizer/create_trek.html")
 
 @organizer.route("/my-treks")
-@login_required
-@organizer_required
 def my_treks():
 
     if "user_id" not in session:
@@ -65,3 +58,61 @@ def my_treks():
 
     treks=Trek.query.filter_by(organizer_id=session["user_id"]).all()
     return render_template("organizer/my_treks.html", treks=treks)
+
+@organizer.route("/delete-trek/<int:id>")
+def delete_trek(id):
+
+    if "user_id" not in session:
+        return redirect(url_for("auth.login"))
+
+    trek = Trek.query.get_or_404(id)
+
+    if trek.organizer_id != session["user_id"]:
+        flash("Unauthorized", "danger")
+        return redirect("/my-treks")
+
+    db.session.delete(trek)
+    db.session.commit()
+    flash("Trek deleted successfully", "success")
+
+    return redirect("/my-treks")
+
+@organizer.route("/edit-trek/<int:id>", methods=["GET", "POST"])
+def edit_trek(id):
+
+    if "user_id" not in session:
+        return redirect(url_for("auth.login"))
+
+    trek = Trek.query.get_or_404(id)
+    if trek.organizer_id != session["user_id"]:
+        flash("Unauthorized Access", "danger")
+        return redirect("/my-treks")
+
+    if request.method == "POST":
+        trek.title = request.form["title"]
+        trek.location = request.form["location"]
+        trek.description = request.form["description"]
+        trek.difficulty = request.form["difficulty"]
+        trek.price = int(request.form["price"])
+        trek.capacity = int(request.form["capacity"])
+        trek.available_slots = int(request.form["capacity"])
+        trek.start_date = datetime.strptime(
+            request.form["start_date"],
+            "%Y-%m-%d"
+        ).date()
+
+        trek.end_date = datetime.strptime(
+            request.form["end_date"],
+            "%Y-%m-%d"
+        ).date()
+        db.session.commit()
+        flash(
+            "Trek Updated Successfully",
+            "success"
+        )
+        return redirect("/my-treks")
+
+    return render_template(
+        "organizer/edit_trek.html",
+        trek=trek
+    )

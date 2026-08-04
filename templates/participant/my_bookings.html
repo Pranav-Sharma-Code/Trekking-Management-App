@@ -1,0 +1,141 @@
+{% extends "layouts/dashboard_base.html" %}
+
+{% block title %}
+My Bookings
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/participant.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <!-- Heading -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold">📖 My Bookings </h2>
+
+            <p class="text-muted">
+                View all your booked treks and trekking history.
+            </p>
+        </div>
+    </div>
+
+
+    {% if bookings %}
+
+    <div class="card shadow border-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+
+                <thead class="table-primary">
+                    <tr>
+                        <th>ID</th>
+                        <th>Image</th>
+                        <th>Trek</th>
+                        <th>Location</th>
+                        <th>Start Date</th>
+                        <th>Price</th>
+                        <th>Status</th>
+                        <th>Booking Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for booking in bookings %}
+
+                    <tr>
+                        <td>#{{ booking.id }}</td>
+
+                        <td>
+                            {% if booking.trek.image %}
+                            <img src="{{ booking.trek.image }}" class="booking-image">
+
+                            {% else %}
+                            <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b" class="booking-image">
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            <strong>{{ booking.trek.title }}</strong>
+                        </td>
+
+                        <td>{{ booking.trek.location }}</td>
+
+                        <td>{{ booking.trek.start_date }}</td>
+
+                        <td>₹ {{ booking.trek.price }}</td>
+
+                        <td>
+
+                            {% if booking.status=="Booked" %}
+
+                            <span class="badge bg-success">Booked</span>
+
+                            {% elif booking.status=="Cancelled" %}
+
+                            <span class="badge bg-danger">
+                                Cancelled
+                            </span>
+
+                            {% elif booking.status=="Completed" %}
+
+                            <span class="badge bg-primary">
+                                Completed
+                            </span>
+                            {% else %}
+
+                            <span class="badge bg-secondary">
+                                {{ booking.status }}
+                            </span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {{ booking.booking_date }}
+                        </td>
+
+                        <td>
+                            {% if booking.status=="Booked" %}
+                            <a href="{{ url_for('participant.cancel_booking', booking_id=booking.id) }}"
+                               class="btn btn-sm btn-outline-danger">
+                                Cancel
+                            </a>
+
+                            {% else %}
+                            -
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {% else %}
+
+    <div class="card shadow border-0">
+        <div class="card-body text-center py-5">
+            <img src="https://cdn-icons-png.flaticon.com/512/4076/4076478.png" width="120" class="mb-3">
+
+            <h4>No Bookings Yet</h4>
+
+            <p class="text-muted">
+                Start exploring amazing trekking adventures.
+            </p>
+
+            <a href="{{ url_for('participant.browse_treks') }}" class="btn btn-primary">
+                Browse Treks
+            </a>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,69 @@
+.trek-card{
+    transition:.3s;
+    border-radius:15px;
+}
+
+.trek-card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 12px 25px rgba(0,0,0,.15);
+
+}
+
+.trek-image{
+    height:220px;
+    object-fit:cover;
+    border-radius:15px 15px 0 0;
+}
+
+.card-body p{
+    margin-bottom:8px;
+}
+
+.badge{
+    height:30px;
+    padding:8px 12px;
+    font-size:13px;
+}
+
+.trek-detail-image{
+    height:600px;
+    object-fit:cover;
+    border-radius:12px 0 0 12px;
+}
+
+.card-body h2{
+    color:#0d6efd;
+}
+
+.card-body p{
+    margin-bottom:15px;
+    font-size:15px;
+}
+
+.card-body h4{
+    margin-top:20px;
+}
+
+.btn-lg{
+    padding:12px 35px;
+}
+
+.booking-image{
+    width:90px;
+    height:60px;
+    object-fit:cover;
+    border-radius:8px;
+}
+
+.table td{
+    vertical-align:middle;
+}
+
+.table th{
+    white-space:nowrap;
+}
+
+.badge{
+    font-size:13px;
+    padding:8px 12px;
+}

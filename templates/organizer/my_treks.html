@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "layouts/dashboard_base.html" %}
 
 {% block title %}
 My Treks
@@ -6,36 +6,60 @@ My Treks
 
 {% block content %}
 
-<h2>My Treks</h2>
+<div class="card shadow-lg border-0">
 
-<table class="table">
+    <div class="card-header bg-primary text-white d-flex justify-content-between">
 
-    <thead>
-        <tr>
-            <th>Title</th>
-            <th>Location</th>
-            <th>Difficulty</th>
-            <th>Capacity</th>
-            <th>Slots</th>
-            <th>Price</th>
-        </tr>
+        <h3>
+            <i class="bi bi-map-fill"></i>
+            My Treks
+        </h3>
 
-    </thead>
+        <a href="/create-trek" class="btn btn-light">
+            <i class="bi bi-plus-circle"></i>
+            Create Trek
+        </a>
 
-    <tbody>
-        {% for trek in treks %}
-        <tr>
-            <td>{{ trek.title }}</td>
-            <td>{{ trek.location }}</td>
-            <td>{{ trek.difficulty }}</td>
-            <td>{{ trek.capacity }}</td>
-            <td>{{ trek.available_slots }}</td>
-            <td>₹{{ trek.price }}</td>
-        </tr>
-        {% endfor %}
+    </div>
 
-    </tbody>
+    <div class="card-body">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Location</th>
+                    <th>Difficulty</th>
+                    <th>Price</th>
+                    <th>Slots</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for trek in treks %}
+                <tr>
+                    <td>{{ trek.title }}</td>
+                    <td>{{ trek.location }}</td>
+                    <td>{{ trek.difficulty }}</td>
+                    <td>₹ {{ trek.price }}</td>
+                    <td>{{ trek.available_slots }}</td>
+                    <td>
+                        <a href="/edit-trek/{{ trek.id }}"
+                           class="btn btn-warning btn-sm">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
 
-</table>
+                        <a href="/delete-trek/{{ trek.id }}"
+                           class="btn btn-danger btn-sm"
+                           onclick="return confirm('Delete this trek?')">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 
 {% endblock %}

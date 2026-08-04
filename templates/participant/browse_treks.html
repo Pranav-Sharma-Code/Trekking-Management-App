@@ -1,0 +1,170 @@
+{% extends "layouts/dashboard_base.html" %}
+
+{% block title %}
+Browse Treks
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/participant.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <!-- Heading -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold">
+                🥾 Available Treks
+            </h2>
+            <p class="text-muted">
+                Explore and book your next adventure.
+            </p>
+        </div>
+    </div>
+
+    <!-- Search & Filter -->
+
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body">
+            <form method="GET">
+                <div class="row">
+                    <div class="col-md-4">
+                        <input
+                            type="text"
+                            class="form-control"
+                            name="search"
+                            placeholder="Search Trek / Location">
+                    </div>
+
+                    <div class="col-md-3">
+                        <select
+                            class="form-select"
+                            name="difficulty">
+
+                            <option value="">All Difficulty</option>
+                            <option value="Easy">Easy</option>
+                            <option value="Moderate">Moderate</option>
+                            <option value="Hard">Hard</option>
+
+                        </select>
+                    </div>
+
+                    <div class="col-md-3">
+                        <select
+                            class="form-select"
+                            name="status">
+                            <option value="">All Status</option>
+                            <option value="Open">Open</option>
+                            <option value="Closed">Closed</option>
+                            <option value="Completed">Completed</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-2 d-grid">
+                        <button class="btn btn-primary">Search</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- Trek Cards -->
+
+    <div class="row">
+        {% if treks %}
+        {% for trek in treks %}
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card trek-card shadow border-0 h-100">
+                <!-- Image -->
+                {% if trek.image %}
+                <img src="{{ trek.image }}" class="card-img-top trek-image">
+
+                {% else %}
+
+                <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b"
+                     class="card-img-top trek-image">
+
+                {% endif %}
+
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <h4 class="fw-bold">
+                            {{ trek.title }}
+                        </h4>
+                        <span class="badge bg-success">
+                            {{ trek.status }}
+                        </span>
+                    </div>
+
+                    <hr>
+                    <p>
+                        📍 <strong>Location :</strong>
+                        {{ trek.location }}
+                    </p>
+                    <p>
+                        🗺️ <strong>State :</strong>
+                        {{ trek.state }}
+                    </p>
+
+                    <p>
+                        🥾 <strong>Difficulty :</strong>
+                        {{ trek.difficulty }}
+                    </p>
+
+                    <p>
+                        ⛰️ <strong>Altitude :</strong>
+                        {{ trek.altitude }} m
+                    </p>
+
+                    <p>
+                        ⏳ <strong>Duration :</strong>
+                        {{ trek.duration }} Days
+                    </p>
+
+                    <p>
+                        👥 <strong>Slots :</strong>
+                        {{ trek.available_slots }}
+                        /
+                        {{ trek.capacity }}
+                    </p>
+
+                    <p>
+                        📅 <strong>Start :</strong>
+                        {{ trek.start_date }}
+                    </p>
+
+                    <p>
+                        💰 <strong>Price :</strong>
+                        ₹ {{ trek.price }}
+                    </p>
+
+                </div>
+                <div class="card-footer bg-white border-0">
+
+                    {% if trek.status=="Open" and trek.available_slots>0 %}
+                    <a href="{{ url_for('participant.trek_details', trek_id=trek.id) }}"
+                        class="btn btn-primary w-100">
+                        View Details
+                    </a>
+
+                    {% else %}
+
+                    <button class="btn btn-secondary w-100" disabled>Trek Not Available</button>
+
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="col-12">
+            <div class="alert alert-warning">No Trek Available.</div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

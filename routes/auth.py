@@ -21,14 +21,36 @@ def register():
             return redirect(url_for("auth.register"))
         
         hashed_password = generate_password_hash(password)
-        new_user = User(name=name, email=email, password=hashed_password, phone=phone, role=role)
+
+        approved = False if role == "Organizer" else True
+        new_user = User(name=name, 
+                        email=email, 
+                        password=hashed_password, 
+                        phone=phone, 
+                        role=role,
+                        approved=approved,
+                        blacklisted=False
+                    )
 
         db.session.add(new_user)
         db.session.commit()
+
+        if role == "Organizer":
+            flash(
+                "Registration successful! Please wait for Admin approval.",
+                "warning"
+            )
+        else:
+            flash(
+               "Registration successful! Please login.",
+                "success" 
+            )
+
+
         flash("Registration Successful! Please Login.", "success")
         return redirect(url_for("auth.login"))
 
-    return render_template("register.html")
+    return render_template("auth/register.html")
 
 @auth.route("/login", methods=["GET", "POST"])
 def login():
@@ -38,22 +60,42 @@ def login():
         password = request.form["password"]
         user = User.query.filter_by(email=email).first()
 
-        if user and check_password_hash(user.password, password):
-            session["user_id"] = user.id
-            session["name"] = user.name
-            session["role"] = user.role
-            flash("Login Successful", "success")
+        if not user:
+            flash("Invalid Email or Password", "danger")
+            return redirect(url_for("auth.login"))
 
-            if user.role == "Admin":
-                return redirect("/admin")
-            elif user.role == "Organizer":
-                return redirect("/organizer")
-            else:
-                return redirect("/participant")
+        if not check_password_hash(user.password, password):
+            flash("Invalid Email or Password", "danger")
+            return redirect(url_for("auth.login"))  
 
+        if user.blacklisted:
+            flash("Your account has been blacklisted.", "danger")
+            return redirect(url_for("auth.login"))
+
+        if user.role == "Organizer" and not user.approved:
+            flash("Waiting for Admin Approval.", "warning")
+            return redirect(url_for("auth.login"))
+
+        session["user_id"] = user.id
+        session["name"] = user.name
+        session["role"] = user.role
+
+        flash(f"Welcome {user.name}!", "success")
+
+        if user.role == "Admin":
+            return redirect(url_for("admin.dashboard"))
+
+        elif user.role == "Organizer":
+            return redirect(url_for("organizer.dashboard"))
+
+        elif user.role == "Participant":
+            return redirect(url_for("participant.dashboard"))
+
+        
         flash("Invalid Email or Password", "danger")
+        return redirect(url_for("home"))
 
-    return render_template("login.html")
+    return render_template("auth/login.html")
 
 @auth.route("/logout")
 def logout():
