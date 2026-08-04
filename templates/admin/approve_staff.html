@@ -1,1 +1,50 @@
-<h1>Approve Staff</h1>
+{% extends "layouts/dashboard_base.html" %}
+
+{% block title %}
+Approve Staff
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h3>Approve Trek Staff</h3>
+        </div>
+        <div class="card-body">
+            {% if staff %}
+            <table class="table table-bordered table-hover align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for member in staff %}
+                    <tr>
+                        <td>{{ member.id }}</td>
+                        <td>{{ member.name }}</td>
+                        <td>{{ member.email }}</td>
+                        <td>{{ member.phone }}</td>
+
+                        <td>
+                            <a href="{{ url_for('admin.approve', user_id=member.id) }}" class="btn btn-success btn-sm">Approve</a>
+                            <a href="{{ url_for('admin.blacklist', user_id=member.id) }}" class="btn btn-danger btn-sm">Blacklist</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="alert alert-success text-center">No Pending Staff Requests.</div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

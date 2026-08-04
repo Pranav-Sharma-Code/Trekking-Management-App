@@ -28,7 +28,7 @@ def register():
                         password=hashed_password, 
                         phone=phone, 
                         role=role,
-                        approved=approved,
+                        approved=False if role == "Organizer" else True,
                         blacklisted=False
                     )
 

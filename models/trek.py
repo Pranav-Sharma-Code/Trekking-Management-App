@@ -22,3 +22,4 @@ class Trek(db.Model):
     status = db.Column(db.String(20), default="Open")
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     bookings = db.relationship("Booking", backref="trek", lazy=True)
+    Trek_staff = db.relationship("User", backref="assigned_treks")

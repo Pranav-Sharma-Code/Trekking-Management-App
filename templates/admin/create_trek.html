@@ -1,0 +1,163 @@
+{% extends "layouts/dashboard_base.html" %}
+
+{% block title %}
+Create Trek
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <div class="card shadow border-0">
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0">🥾 Create New Trek</h3>
+        </div>
+
+        <div class="card-body">
+            <form method="POST">
+                <div class="row">
+
+                    <!-- Trek Name -->
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Trek Name</label>
+                        <input type="text" class="form-control" name="title" required>
+                    </div>
+
+                    <!-- State -->
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">State</label>
+                        <input type="text" class="form-control" name="state" required>
+                    </div>
+
+                    <!-- Location -->
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Location</label>
+                        <input type="text" class="form-control" name="location" required>
+                    </div>
+
+                    <!-- Difficulty -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label">Difficulty</label>
+
+                        <select class="form-select" name="difficulty">
+                            <option>Easy</option>
+                            <option>Moderate</option>
+                            <option>Hard</option>
+                        </select>
+                    </div>
+
+                    <!-- Duration -->
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Duration (Days)</label>
+                        <input type="number" class="form-control" name="duration" required>
+                    </div>
+
+                    <!-- Altitude -->
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Altitude (m)</label>
+                        <input type="number" class="form-control" name="altitude">
+                    </div>
+
+                    <!-- Registration Deadline -->
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Registration Deadline</label>
+                        <input type="date" class="form-control" name="registration_deadline" required>
+                    </div>
+
+                    <!-- Start Date -->
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Start Date</label>
+                        <input type="date" class="form-control" name="start_date" required>
+                    </div>
+
+                    <!-- End Date -->
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">End Date</label>
+                        <input type="date" class="form-control" name="end_date" required>
+                    </div>
+
+                    <!-- Capacity -->
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Capacity</label>
+                        <input type="number" class="form-control" name="capacity" required>
+
+                    </div>
+
+                    <!-- Price -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label">Price (₹)</label>
+                        <input type="number" class="form-control" name="price" required>
+                    </div>
+
+                    <!-- Staff -->
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Assign Staff</label>
+
+                        <select class="form-select" name="organizer_id">
+                            {% for member in staff %}
+
+                            <option value="{{ member.id }}">
+                                {{ member.name }}
+                            </option>
+
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Status -->
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Trek Status</label>
+
+                        <select class="form-select" name="status">
+                            <option value="Pending">Pending</option>
+                            <option value="Open">Open</option>
+                            <option value="Closed">]Closed</option>
+
+                        </select>
+                    </div>
+
+                    <!-- Description -->
+
+                    <div class="col-12 mb-4">
+
+                        <label class="form-label">Description</label>
+
+                        <textarea class="form-control" rows="6" name="description" required></textarea>
+                    </div>
+
+                    <!-- Image URL -->
+
+                    <div class="col-12 mb-4">
+                        <label class="form-label">Image URL</label>
+                        <input type="text" class="form-control" name="image" placeholder="https://...">
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between">
+
+                    <a href="{{ url_for('admin.manage_treks') }}" class="btn btn-secondary">
+                        Cancel
+                    </a>
+
+                    <button type="submit" class="btn btn-primary">Create Trek</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

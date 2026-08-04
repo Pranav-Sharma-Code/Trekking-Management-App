@@ -1,1 +1,90 @@
-<h1>Manage Users</h1>
+{% extends "layouts/dashboard_base.html" %}
+
+{% block title %}
+Manage Users
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold">Manage Users</h2>
+            <p class="text-muted">View, Search and Blacklist Participants</p>
+        </div>
+    </div>
+
+    <!-- Search -->
+
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body">
+            <form method="GET">
+                <div class="row">
+                    <div class="col-md-10">
+                        <input class="form-control" name="search"
+                            value="{{ request.args.get('search','') }}"
+                            placeholder="Search User Name">
+                    </div>
+
+                    <div class="col-md-2 d-grid">
+                        <button class="btn btn-primary">Search</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Table -->
+
+    <div class="card shadow border-0">
+        <div class="table-responsive">
+            <table class="table table-hover">
+
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                {% for user in users %}
+
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.name }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.phone }}</td>
+
+                        <td>
+                            {% if user.blacklisted %}
+                                <span class="badge bg-danger">Blacklisted</span>
+                            {% else %}
+                                <span class="badge bg-success">Active</span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {% if not user.blacklisted %}
+                            <a href="{{ url_for('admin.blacklist_user',user_id=user.id) }}"
+                               class="btn btn-danger btn-sm">
+                                Blacklist
+                            </a>
+                            {% else %}
+
+                            <button class="btn btn-secondary btn-sm" disabled>Blacklisted</button>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

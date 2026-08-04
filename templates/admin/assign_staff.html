@@ -1,1 +1,84 @@
-<h1>Assign Staff</h1>
+{% extends "layouts/dashboard_base.html" %}
+
+{% block title %}
+Assign Staff
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <div class="card shadow">
+        <div class="card-header bg-info text-white">
+            <h3>Assign Staff To Trek</h3>
+        </div>
+
+        <div class="card-body">
+            <form method="POST">
+
+                <!-- Trek -->
+
+                <div class="mb-3">
+                    <label class="form-label">Select Trek</label>
+
+                    <select class="form-select" name="trek_id" required>
+
+                        {% for trek in treks %}
+                        <option value="{{ trek.id }}">{{ trek.title }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Staff -->
+
+                <div class="mb-4">
+                    <label class="form-label">Select Staff</label>
+
+                    <select class="form-select" name="staff_id" required>
+                        {% for member in staff %}
+                        <option value="{{ member.id }}">{{ member.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button class="btn btn-primary">Assign Staff</button>
+            </form>
+        </div>
+    </div>
+
+    <br>
+
+    <div class="card shadow">
+        <div class="card-header">
+            <h4>Current Assignments</h4>
+        </div>
+
+        <div class="card-body">
+            <table class="table table-bordered table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Trek</th>
+                        <th>Assigned Staff</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for trek in treks %}
+                    <tr>
+                        <td>{{ trek.id }}</td>
+                        <td>{{ trek.title }}</td>
+                        <td>
+                            {% if trek.Trek_staff %}
+                                {{ trek.Trek_staff.name }}
+                            {% else %}
+                                Not Assigned
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

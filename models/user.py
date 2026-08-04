@@ -12,3 +12,5 @@ class User(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     treks = db.relationship("Trek", backref="organizer", lazy=True)
     bookings = db.relationship("Booking", backref="participant", lazy=True)
+    approved = db.Column(db.Boolean, default=False)
+    blacklisted = db.Column(db.Boolean, default=False)

@@ -25,8 +25,8 @@ def dashboard():
 
     total_treks = Trek.query.count()
     total_users = User.query.filter_by(role="Participant").count()
-    total_staff = User.query.filter_by(role="Organizer").count()
-    pending_organizers = User.query.filter_by(role="Organizer", approved=False).count()
+    total_staff = User.query.filter_by(role="Trek_staff").count()
+    pending_Trek_staffs = User.query.filter_by(role="Trek_staff", approved=False).count()
     total_bookings = Booking.query.count()
 
     return render_template(
@@ -35,8 +35,8 @@ def dashboard():
         total_treks=total_treks,
         total_users=total_users,
         total_staff=total_staff,
-        total_organizers=total_organizers,
-        pending_organizers=pending_organizers,
+        total_Trek_staffs=total_Trek_staffs,
+        pending_Trek_staffs=pending_Trek_staffs,
         total_bookings=total_bookings,
         recent_treks=recent_treks,
         recent_bookings=recent_bookings
@@ -96,7 +96,7 @@ def create_trek():
     if not admin_required():
         return redirect(url_for("auth.login"))
 
-    staff = User.query.filter_by(role="Organizer", approved=True).all()
+    staff = User.query.filter_by(role="Trek_staff", approved=True).all()
 
     if request.method == "POST":
 
@@ -114,7 +114,7 @@ def create_trek():
             capacity=request.form["capacity"],
             available_slots=request.form["capacity"],
             price=request.form["price"],
-            organizer_id=request.form["organizer_id"],
+            Trek_staff_id=request.form["Trek_staff_id"],
             status=request.form["status"]
         )
 
@@ -140,7 +140,7 @@ def edit_trek(trek_id):
         return redirect(url_for("auth.login"))
 
     trek = Trek.query.get_or_404(trek_id)
-    staff = User.query.filter_by(role="Organizer", approved=True).all()
+    staff = User.query.filter_by(role="Trek_staff", approved=True).all()
 
     if request.method == "POST":
 
@@ -156,7 +156,7 @@ def edit_trek(trek_id):
         trek.end_date=request.form["end_date"]
         trek.capacity=request.form["capacity"]
         trek.price=request.form["price"]
-        trek.organizer_id=request.form["organizer_id"]
+        trek.Trek_staff_id=request.form["Trek_staff_id"]
         trek.status=request.form["status"]
 
         db.session.commit()
@@ -185,3 +185,87 @@ def delete_trek(trek_id):
     return redirect(url_for("admin.manage_treks"))
 
 
+@admin.route("/admin/approve-staff")
+def approve_staff():
+
+    if not admin_required():
+        return redirect(url_for("auth.login"))
+
+    staff = User.query.filter_by(
+        role="Trek_staff",
+        approved=False,
+        blacklisted=False
+    ).all()
+
+    return render_template("admin/approve_staff.html", staff=staff)
+
+@admin.route("/admin/approve/<int:user_id>")
+def approve(user_id):
+    if not admin_required():
+        return redirect(url_for("auth.login"))
+
+    user = User.query.get_or_404(user_id)
+    user.approved = True
+    db.session.commit()
+
+    flash("Staff Approved Successfully!", "success")
+    return redirect(url_for("admin.approve_staff"))
+
+@admin.route("/admin/blacklist/<int:user_id>")
+def blacklist(user_id):
+
+    if not admin_required():
+        return redirect(url_for("auth.login"))
+
+    user = User.query.get_or_404(user_id)
+    user.blacklisted = True
+    db.session.commit()
+
+    flash("Staff Blacklisted Successfully!", "warning")
+    return redirect(url_for("admin.approve_staff"))
+
+@admin.route("/admin/assign-staff", methods=["GET", "POST"])
+def assign_staff():
+    if not admin_required():
+        return redirect(url_for("auth.login"))
+
+    treks = Trek.query.all()
+    staff = User.query.filter_by(role="Organizer", approved=True, blacklisted=False).all()
+
+    if request.method == "POST":
+        trek = Trek.query.get(request.form["trek_id"])
+        trek.organizer_id = request.form["staff_id"]
+        db.session.commit()
+        flash("Staff Assigned Successfully!", "success")
+
+        return redirect(url_for("admin.assign_staff"))
+    return render_template("admin/assign_staff.html", treks=treks, staff=staff)
+
+@admin.route("/admin/manage-users")
+def manage_users():
+
+    if not admin_required():
+        return redirect(url_for("auth.login"))
+
+    search = request.args.get("search")
+
+    if search:
+        users = User.query.filter(User.role == "Participant", 
+                User.name.contains(search)).all()
+    else:
+        users = User.query.filter_by(role="Participant").all()
+
+    return render_template("admin/manage_users.html", users=users)
+
+@admin.route("/admin/blacklist-user/<int:user_id>")
+def blacklist_user(user_id):
+
+    if not admin_required():
+        return redirect(url_for("auth.login"))
+
+    user = User.query.get_or_404(user_id)
+    user.blacklisted = True
+    db.session.commit()
+
+    flash("User Blacklisted Successfully.", "warning")
+    return redirect(url_for("admin.manage_users"))
