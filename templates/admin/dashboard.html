@@ -47,7 +47,7 @@ Admin Dashboard
             <div class="card shadow border-0">
                 <div class="card-body text-center">
                     <h1 class="text-warning">
-                        {{ total_organizers }}
+                        {{ total_staff }}
                     </h1>
                     <h5>Staff</h5>
                 </div>
@@ -58,7 +58,7 @@ Admin Dashboard
             <div class="card shadow border-0">
                 <div class="card-body text-center">
                     <h1 class="text-danger">
-                        {{ pending_organizers }}
+                        {{ pending_Trek_staffs }}
                     </h1>
                     <h5>Pending Staff</h5>
                 </div>
@@ -95,6 +95,7 @@ Admin Dashboard
                         <th>Name</th>
                         <th>Location</th>
                         <th>Difficulty</th>
+                        <th>Assigned Staff</th>
                         <th>Status</th>
                     </tr>
                 </thead>
@@ -106,10 +107,17 @@ Admin Dashboard
                         <td>{{ trek.title }}</td>
                         <td>{{ trek.location }}</td>
                         <td>{{ trek.difficulty }}</td>
+
                         <td>
-                            <span class="badge bg-success">
-                                {{ trek.status }}
-                            </span>
+                            {% if trek.Trek_staff %}
+                            {{ trek.Trek_staff.name }}
+                            {% else %}
+                            Not Assigned
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            <span class="badge bg-success">{{ trek.status }}</span>
                         </td>
                     </tr>
                     {% endfor %}

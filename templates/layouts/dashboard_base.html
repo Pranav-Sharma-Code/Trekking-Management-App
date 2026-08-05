@@ -26,138 +26,138 @@
 
 <body>
 
-<div class="wrapper">
+    <div class="wrapper">
 
-    <!-- Sidebar -->
+        <!-- Sidebar -->
 
-    <aside class="sidebar">
+        <aside class="sidebar">
 
-        <div class="logo"><h3>🏔 Trekking</h3>\</div>
+            <div class="logo">
+                <h3>🏔 Trekking</h3>\
+            </div>
 
-        <ul>
+            <ul>
 
-            <!-- ADMIN -->
+                <!-- ADMIN -->
 
-            {% if session.get("role")=="Admin" %}
+                {% if session.get("role")=="Admin" %}
+                <li>
+                    <a href="{{ url_for('admin.dashboard') }}">
+                        <i class="bi bi-speedometer2"></i>
+                        Dashboard
+                    </a>
+                </li>
 
-            <li>
-                <a href="{{ url_for('admin.dashboard') }}">
-                    <i class="bi bi-speedometer2"></i>
-                    Dashboard
-                </a>
-            </li>
+                <li>
+                    <a href="{{ url_for('admin.manage_treks') }}">
+                        <i class="bi bi-map"></i>
+                        Manage Treks
+                    </a>
+                </li>
 
-            <li>
-                <a href="{{ url_for('admin.manage_treks') }}">
-                    <i class="bi bi-map"></i>
-                    Manage Treks
-                </a>
-            </li>
+                <li>
+                    <a href="{{ url_for('admin.approve_staff') }}">
+                        <i class="bi bi-person-check"></i>
+                        Approve Staff
+                    </a>
+                </li>
 
-            <li>
-                <a href="{{ url_for('admin.approve_staff') }}">
-                    <i class="bi bi-person-check"></i>
-                    Approve Staff
-                </a>
-            </li>
+                <li>
+                    <a href="{{ url_for('admin.assign_staff') }}">
+                        <i class="bi bi-person-workspace"></i>
+                        Assign Staff
+                    </a>
+                </li>
 
-            <li>
-                <a href="{{ url_for('admin.assign_staff') }}">
-                    <i class="bi bi-person-workspace"></i>
-                    Assign Staff
-                </a>
-            </li>
-
-            <li
-                <a href="{{ url_for('admin.manage_users') }}">
+                <li <a href="{{ url_for('admin.manage_users') }}">
                     <i class="bi bi-people"></i>
                     Manage Users
-                </a>
-            </li>
+                    </a>
+                </li>
 
-            <li>
-
-                <a href="{{ url_for('admin.booking') }}">
-                    <i class="bi bi-journal-check"></i>
-                    Bookings
-                </a>
-            </li>
-            {% endif %}
-
-
-            <!-- STAFF -->
-
-            {% if session.get("role")=="Trek_staff" %}
-
-            <li>
-                <a href="{{ url_for('Trek_staff.dashboard') }}">
-                    <i class="bi bi-speedometer2"></i>
-                    Dashboard
-                </a>
-            </li>
-
-            <li>
-                <a href="{{ url_for('Trek_staff.my_treks') }}">
-                    <i class="bi bi-map"></i>
-                    Assigned Treks
-                </a>
-            </li>
-
-            {% endif %}
+                <li>
+                    <a href="{{ url_for('admin.bookings') }}">
+                        <i class="bi bi-journal-check"></i>
+                        Bookings
+                    </a>
+                </li>
+                {% endif %}
 
 
-            <!-- PARTICIPANT -->
+                <!-- STAFF -->
 
-            {% if session.get("role")=="Participant" %}
-            <li>
+                {% if session.get("role")=="Trek_staff" %}
 
-                <a href="{{ url_for('participant.dashboard') }}">
-                    <i class="bi bi-speedometer2"></i>
-                    Dashboard
-                </a>
-            </li>
+                <li>
+                    <a href="{{ url_for('Trek_staff.dashboard') }}">
+                        <i class="bi bi-speedometer2"></i>
+                        Dashboard
+                    </a>
+                </li>
 
-            <li>
-                <a href="{{ url_for('participant.browse_treks') }}">
-                    <i class="bi bi-compass"></i>
-                    Browse Treks
-                </a>
-            </li>
+                <li>
+                    <a href="{{ url_for('Trek_staff.my_treks') }}">
+                        <i class="bi bi-map"></i>
+                        Assigned Treks
+                    </a>
+                </li>
 
-            <li>
-                <a href="{{ url_for('participant.my_bookings') }}">
-                    <i class="bi bi-journal-check"></i>
-                    My Bookings
-                </a>
-            </li>
-
-            {% endif %}
+                {% endif %}
 
 
-            <!-- LOGOUT -->
+                <!-- PARTICIPANT -->
 
-            <li>
-                <a href="{{ url_for('auth.logout') }}">
-                    <i class="bi bi-box-arrow-right"></i>
-                    Logout
-                </a>
-            </li>
-        </ul>
-    </aside>
+                {% if session.get("role")=="Participant" %}
+                <li>
 
-    <!-- Main -->
+                    <a href="{{ url_for('participant.dashboard') }}">
+                        <i class="bi bi-speedometer2"></i>
+                        Dashboard
+                    </a>
+                </li>
 
-    <div class="main">
-        <nav class="topbar">
-            <h4>Welcome, {{ session.get("name") }}</h4>
-        </nav>
+                <li>
+                    <a href="{{ url_for('participant.browse_treks') }}">
+                        <i class="bi bi-compass"></i>
+                        Browse Treks
+                    </a>
+                </li>
 
-        <div class="content">
-            {% block content %}
-            {% endblock %}
+                <li>
+                    <a href="{{ url_for('participant.my_bookings') }}">
+                        <i class="bi bi-journal-check"></i>
+                        My Bookings
+                    </a>
+                </li>
+
+                {% endif %}
+
+
+                <!-- LOGOUT -->
+
+                <li>
+                    <a href="{{ url_for('auth.logout') }}">
+                        <i class="bi bi-box-arrow-right"></i>
+                        Logout
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main -->
+
+        <div class="main">
+            <nav class="topbar">
+                <h4>Welcome, {{ session.get("name") }}</h4>
+            </nav>
+
+            <div class="content">
+                {% block content %}
+                {% endblock %}
+            </div>
         </div>
     </div>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

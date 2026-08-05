@@ -19,6 +19,7 @@ def admin_required():
 
 @admin.route("/admin")
 def dashboard():
+
     if not admin_required():
         flash("Unauthorized Access!", "danger")
         return redirect(url_for("auth.login"))
@@ -26,16 +27,16 @@ def dashboard():
     total_treks = Trek.query.count()
     total_users = User.query.filter_by(role="Participant").count()
     total_staff = User.query.filter_by(role="Trek_staff").count()
-    pending_Trek_staffs = User.query.filter_by(role="Trek_staff", approved=False).count()
+    pending_Trek_staffs = User.query.filter_by(role="Trek_staff", approved=False ).count()
     total_bookings = Booking.query.count()
+    recent_treks = Trek.query.order_by(Trek.id.desc() ).limit(5).all()
+    recent_bookings = Booking.query.order_by(Booking.id.desc() ).limit(5).all()
 
     return render_template(
         "admin/dashboard.html",
-
         total_treks=total_treks,
         total_users=total_users,
         total_staff=total_staff,
-        total_Trek_staffs=total_Trek_staffs,
         pending_Trek_staffs=pending_Trek_staffs,
         total_bookings=total_bookings,
         recent_treks=recent_treks,
@@ -49,10 +50,7 @@ def manage_treks():
 
     treks = Trek.query.order_by(Trek.id.desc()).all()
 
-    return render_template(
-        "admin/manage_trek.html",
-        treks=treks
-    )
+    return render_template("admin/manage_trek.html", treks=treks)
 
 @admin.route("/admin/staff")
 def staff_requests():
@@ -74,7 +72,7 @@ def users():
     users=User.query.filter_by(role="Participant").all()
 
     return render_template(
-        "admin/approve_users.html",
+        "admin/manage_users.html",
         users=users
     )
 
@@ -85,10 +83,7 @@ def bookings():
 
     bookings = Booking.query.order_by(Booking.id.desc()).all()
 
-    return render_template(
-        "admin/bookings.html",
-        bookings=bookings
-    )
+    return render_template("admin/bookings.html", bookings=bookings)
 
 @admin.route("/admin/create-trek", methods=["GET", "POST"])
 def create_trek():
@@ -164,11 +159,7 @@ def edit_trek(trek_id):
         flash("Trek Updated Successfully.", "success")
 
         return redirect(url_for("admin.manage_treks"))
-
-    return render_template(
-        "admin/edit_trek.html",
-        trek=trek, staff=staff
-    )
+    return render_template("admin/edit_trek.html", trek=trek, staff=staff)
 
 @admin.route("/admin/delete-trek/<int:trek_id>")
 def delete_trek(trek_id):
@@ -177,7 +168,6 @@ def delete_trek(trek_id):
         return redirect(url_for("auth.login"))
 
     trek = Trek.query.get_or_404(trek_id)
-
     db.session.delete(trek)
     db.session.commit()
 
@@ -193,8 +183,7 @@ def approve_staff():
 
     staff = User.query.filter_by(
         role="Trek_staff",
-        approved=False,
-        blacklisted=False
+        approved=False, blacklisted=False
     ).all()
 
     return render_template("admin/approve_staff.html", staff=staff)
@@ -230,11 +219,11 @@ def assign_staff():
         return redirect(url_for("auth.login"))
 
     treks = Trek.query.all()
-    staff = User.query.filter_by(role="Organizer", approved=True, blacklisted=False).all()
+    staff = User.query.filter_by(role="Trek_staff", approved=True, blacklisted=False).all()
 
     if request.method == "POST":
         trek = Trek.query.get(request.form["trek_id"])
-        trek.organizer_id = request.form["staff_id"]
+        trek.Trek_staff_id = request.form["staff_id"]
         db.session.commit()
         flash("Staff Assigned Successfully!", "success")
 
@@ -269,3 +258,13 @@ def blacklist_user(user_id):
 
     flash("User Blacklisted Successfully.", "warning")
     return redirect(url_for("admin.manage_users"))
+
+@admin.route("/admin/bookings")
+def bookings():
+
+    if not admin_required():
+        return redirect(url_for("auth.login"))
+
+    bookings = Booking.query.order_by(Booking.id.desc()).all()
+
+    return render_template("admin/bookings.html", bookings=bookings)
