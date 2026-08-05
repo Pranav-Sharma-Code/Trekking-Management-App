@@ -1,52 +1,85 @@
 {% extends "layouts/dashboard_base.html" %}
 
 {% block title %}
-Organizer Dashboard
+Staff Dashboard
 {% endblock %}
 
 {% block content %}
 
-<h2 class="mb-4">
+<div class="container-fluid">
+    <h2 class="fw-bold mb-4">Trek Staff Dashboard</h2>
 
-Organizer Dashboard
-
-</h2>
-
-<div class="row">
-    <div class="col-md-3">
-
-        <div class="dashboard-card">
-            <i class="bi bi-map-fill"></i>
-            <h5>Total Treks</h5>
-            <h2>{{ total_treks }}</h2>
+    <div class="row g-4">
+        <div class="col-md-3">
+            <div class="card shadow border-0">
+                <div class="card-body text-center">
+                    <h2 class="text-primary">{{ total_treks }}</h2>
+                    <h5>Assigned Treks</h5>
+                </div>
+            </div>
         </div>
 
-    </div>
+        <div class="col-md-3">
+            <div class="card shadow border-0">
+                <div class="card-body text-center">
+                    <h2 class="text-success">{{ open_treks }}</h2>
+                    <h5>Open Treks</h5>
+                </div>
+            </div>
+        </div>
 
-    <div class="col-md-3">
-        <div class="dashboard-card">
-            <i class="bi bi-calendar-event"></i>
-            <h5>Upcoming</h5>
-            <h2>{{ upcoming }}</h2>
+        <div class="col-md-3">
+            <div class="card shadow border-0">
+                <div class="card-body text-center">
+                    <h2 class="text-warning">{{ completed_treks }}</h2>
+                    <h5>Completed</h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow border-0">
+                <div class="card-body text-center">
+                    <h2 class="text-danger">{{ total_participants }}</h2>
+                    <h5>Participants</h5>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="col-md-3">
-        <div class="dashboard-card">
-            <i class="bi bi-people-fill"></i>
-            <h5>Participants</h5>
-            <h2>{{ participants }}</h2>
+    <div class="card shadow border-0 mt-5">
+        <div class="card-header bg-success text-white">
+            <h5 class="mb-0">Assigned Treks</h5>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Trek</th>
+                        <th>Location</th>
+                        <th>Status</th>
+                        <th>Slots</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                {% for trek in treks %}
+                    <tr>
+                        <td>{{ trek.id }}</td>
+                        <td>{{ trek.title }}</td>
+                        <td>{{ trek.location }}</td>
+                        <td>{{ trek.status }}</td>
+                        <td>
+                            {{ trek.available_slots }}/{{ trek.capacity }}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
-
-    <div class="col-md-3">
-        <div class="dashboard-card">
-            <i class="bi bi-currency-rupee"></i>
-            <h5>Revenue</h5>
-            <h2>₹{{ revenue }}</h2>
-        </div>
-    </div>
-
 </div>
 
 {% endblock %}

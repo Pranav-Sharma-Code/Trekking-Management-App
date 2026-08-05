@@ -1,8 +1,10 @@
 from datetime import datetime
 from . import db
 
+
 class Trek(db.Model):
     __tablename__ = "trek"
+
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
     image = db.Column(db.String(255))
@@ -22,4 +24,3 @@ class Trek(db.Model):
     status = db.Column(db.String(20), default="Open")
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     bookings = db.relationship("Booking", backref="trek", lazy=True)
-    Trek_staff = db.relationship("User", foreign_keys=[Trek_staff_id], backref="assigned_treks")

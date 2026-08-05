@@ -28,7 +28,7 @@ def register():
                         password=hashed_password, 
                         phone=phone, 
                         role=role,
-                        approved=False if role == "Organizer" else True,
+                        approved=False if role == "Trek_staff" else True,
                         blacklisted=False
                     )
 
@@ -46,8 +46,6 @@ def register():
                 "success" 
             )
 
-
-        flash("Registration Successful! Please Login.", "success")
         return redirect(url_for("auth.login"))
 
     return render_template("auth/register.html")
@@ -76,6 +74,8 @@ def login():
             flash("Waiting for Admin Approval.", "warning")
             return redirect(url_for("auth.login"))
 
+        session.clear()
+        
         session["user_id"] = user.id
         session["name"] = user.name
         session["role"] = user.role
@@ -85,15 +85,13 @@ def login():
         if user.role == "Admin":
             return redirect(url_for("admin.dashboard"))
 
-        elif user.role == "Organizer":
+        elif user.role == "Trek_staff":
             return redirect(url_for("Trek_staff.dashboard"))
 
         elif user.role == "Participant":
             return redirect(url_for("participant.dashboard"))
 
-        
-        flash("Invalid Email or Password", "danger")
-        return redirect(url_for("home"))
+        return redirect(url_for("participant.dashboard"))
 
     return render_template("auth/login.html")
 

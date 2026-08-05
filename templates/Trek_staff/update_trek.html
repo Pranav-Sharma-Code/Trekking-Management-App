@@ -1,0 +1,77 @@
+{% extends "layouts/dashboard_base.html" %}
+
+{% block title %}
+Update Trek
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow border-0">
+                <div class="card-header bg-warning">
+                    <h4 class="mb-0">Update Trek</h4>
+                </div>
+
+                <div class="card-body">
+                    <form method="POST">
+                        <!-- Trek Name -->
+
+                        <div class="mb-3">
+                            <label class="form-label">Trek Name</label>
+                            <input class="form-control" value="{{ trek.title }}" readonly>
+                        </div>
+
+                        <!-- Location -->
+
+                        <div class="mb-3">
+                            <label class="form-label">Location</label>
+                            <input class="form-control" value="{{ trek.location }}" readonly>
+                        </div>
+
+                        <!-- Available Slots -->
+
+                        <div class="mb-3">
+                            <label class="form-label">Available Slots</label>
+                            <input type="number" class="form-control" name="available_slots"
+                                value="{{ trek.available_slots }}" min="0" max="{{ trek.capacity }}" required>
+                        </div>
+
+                        <!-- Status -->
+                        <div class="mb-4">
+                            <label class="form-label">Trek Status</label>
+
+                            <select class="form-select" name="status">
+                                <option value="Open" {% if trek.status=="Open" %}selected{% endif %}>
+                                    Open
+                                </option>
+
+                                <option value="Closed" {% if trek.status=="Closed" %}selected{% endif %}>
+                                    Closed
+                                </option>
+
+                                <option value="Started" {% if trek.status=="Started" %}selected{% endif %}>
+                                    Started
+                                </option>
+
+                                <option value="Completed" {% if trek.status=="Completed" %}selected{% endif %}>
+                                    Completed
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ url_for('Trek_staff.my_treks') }}" class="btn btn-secondary">
+                                ← Back
+                            </a>
+                            <button class="btn btn-success">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
 from models import db
 from models.trek import Trek
+from models.booking import Booking
 from datetime import datetime
 
 Trek_staff = Blueprint("Trek_staff", __name__)
@@ -53,11 +54,12 @@ def create_trek():
 @Trek_staff.route("/my-treks")
 def my_treks():
 
-    if "user_id" not in session:
+    if not staff_required():
         return redirect(url_for("auth.login"))
 
-    treks=Trek.query.filter_by(Trek_staff_id=session["user_id"]).all()
-    return render_template("Trek_staff/my_treks.html", treks=treks)
+    treks = Trek.query.filter_by(organizer_id=session["user_id"]).all()
+
+    return render_template("Trek_staff/my_treks.html",mtreks=treks)
 
 @Trek_staff.route("/delete-trek/<int:id>")
 def delete_trek(id):
@@ -115,4 +117,36 @@ def edit_trek(id):
     return render_template(
         "Trek_staff/edit_trek.html",
         trek=trek
+    )
+
+def staff_required():
+
+    if "user_id" not in session:
+        flash("Please Login First!", "danger")
+        return False
+
+    if session.get("role") != "Trek_staff":
+        flash("Access Denied!", "danger")
+        return False
+
+    return True
+
+
+    completed_treks = Trek.query.filter_by(
+        organizer_id=session["user_id"],
+        status="Completed"
+    ).count()
+
+    total_participants = 0
+
+    for trek in treks:
+        total_participants += Booking.query.filter_by(trek_id=trek.id, status="Booked").count()
+
+    return render_template(
+        "Trek_staff/dashboard.html",
+        treks=treks,
+        total_treks=total_treks,
+        open_treks=open_treks,
+        completed_treks=completed_treks,
+        total_participants=total_participants
     )

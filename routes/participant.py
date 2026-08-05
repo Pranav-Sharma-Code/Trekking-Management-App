@@ -16,6 +16,10 @@ def login_required():
         flash("Please login first!", "danger")
         return False
 
+    if session.get("role") != "Participant":
+        flash("Access Denied!", "danger")
+        return False
+
     return True
 
 
@@ -28,7 +32,7 @@ def dashboard():
 
     total_treks = Trek.query.filter_by(status="Open").count()
     my_bookings = Booking.query.filter_by(
-        user_id=session["user_id"]
+        participant_id=session["user_id"]
     ).count()
 
     return render_template(
@@ -47,7 +51,7 @@ def browse_treks():
     search = request.args.get("search", "")
     difficulty = request.args.get("difficulty", "")
     status = request.args.get("status", "")
-    query = Trek.query
+    query = Trek.query.filter_by(status="Open")
 
     if search:
         query = query.filter(
@@ -124,7 +128,7 @@ def book_trek(trek_id):
         )
 
     already_booked = Booking.query.filter_by(
-        user_id=session["user_id"],
+        participant_id=session["user_id"],
         trek_id=trek.id
     ).first()
 
@@ -140,7 +144,7 @@ def book_trek(trek_id):
         )
 
     booking = Booking(
-        user_id=session["user_id"],
+        participant_id=session["user_id"],
         trek_id=trek.id,
         status="Booked"
     )
@@ -167,7 +171,7 @@ def my_bookings():
         return redirect(url_for("auth.login"))
 
     bookings = Booking.query.filter_by(
-        user_id=session["user_id"]
+        participant_id=session["user_id"]
     ).all()
 
     return render_template(
@@ -184,7 +188,7 @@ def cancel_booking(booking_id):
 
     booking = Booking.query.get_or_404(booking_id)
 
-    if booking.user_id != session["user_id"]:
+    if booking.participant_id != session["user_id"]:
         flash("Unauthorized Access!", "danger")
         return redirect(url_for("participant.my_bookings"))
 
@@ -206,7 +210,7 @@ def profile():
     if "user_id" not in session:
         return redirect(url_for("auth.login"))
 
-    user = User.query.get(session["user_id"])
+    user = User.query.get_or_404(session["user_id"])
 
     return render_template(
         "participant/profile.html",
@@ -220,7 +224,6 @@ def update_profile():
         return redirect(url_for("auth.login"))
 
     user = User.query.get(session["user_id"])
-
     user.name = request.form["name"]
     user.phone = request.form["phone"]
 
