@@ -106,7 +106,7 @@ Create Trek
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Assign Staff</label>
 
-                        <select class="form-select" name="organizer_id">
+                        <select class="form-select" name="staff_id">
                             {% for member in staff %}
 
                             <option value="{{ member.id }}">
@@ -125,7 +125,7 @@ Create Trek
                         <select class="form-select" name="status">
                             <option value="Pending">Pending</option>
                             <option value="Open">Open</option>
-                            <option value="Closed">]Closed</option>
+                            <option value="Closed">Closed</option>
 
                         </select>
                     </div>

@@ -7,41 +7,111 @@ Approve Staff
 {% block content %}
 
 <div class="container-fluid">
-    <div class="card shadow">
-        <div class="card-header bg-primary text-white">
-            <h3>Approve Trek Staff</h3>
+    <h2 class="fw-bold mb-4">Trek Staff Management</h2>
+
+    <!-- Pending Staff -->
+
+    <div class="card shadow border-0 mb-5">
+        <div class="card-header bg-warning">
+            <h5 class="mb-0">Pending Approval Requests</h5>
+        </div>
+
+        <div class="card-body">
+
+            {% if pending_staff %}
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th width="220">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        {% for member in pending_staff %}
+
+                        <tr>
+                            <td>{{ member.id }}</td>
+                            <td>{{ member.name }}</td>
+                            <td>{{ member.email }}</td>
+                            <td>{{ member.phone }}</td>
+                            <td>
+                                <a href="{{ url_for('admin.approve', user_id=member.id) }}"
+                                   class="btn btn-success btn-sm">
+                                    Approve
+                                </a>
+
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            {% else %}
+
+            <div class="alert alert-success mb-0">
+                No Pending Staff Requests.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+
+
+    <!-- Approved Staff -->
+
+    <div class="card shadow border-0">
+        <div class="card-header bg-success text-white">
+            <h5 class="mb-0">Approved Staff</h5>
         </div>
         <div class="card-body">
-            {% if staff %}
-            <table class="table table-bordered table-hover align-middle">
-                <thead class="table-dark">
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
 
-                <tbody>
-                    {% for member in staff %}
-                    <tr>
-                        <td>{{ member.id }}</td>
-                        <td>{{ member.name }}</td>
-                        <td>{{ member.email }}</td>
-                        <td>{{ member.phone }}</td>
+            {% if approved_staff %}
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Status</th>
+                            <th width="150">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
 
-                        <td>
-                            <a href="{{ url_for('admin.approve', user_id=member.id) }}" class="btn btn-success btn-sm">Approve</a>
-                            <a href="{{ url_for('admin.blacklist', user_id=member.id) }}" class="btn btn-danger btn-sm">Blacklist</a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                        {% for member in approved_staff %}
+
+                        <tr>
+                            <td>{{ member.id }}</td>
+                            <td>{{ member.name }}</td>
+                            <td>{{ member.email }}</td>
+                            <td>{{ member.phone }}</td>
+
+                            <td>
+                                <span class="badge bg-success">Approved</span>
+                            </td>
+
+                            <td>
+                                <a href="{{ url_for('admin.blacklist', user_id=member.id) }}"
+                                   class="btn btn-danger btn-sm">
+                                    Blacklist
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
             {% else %}
-            <div class="alert alert-success text-center">No Pending Staff Requests.</div>
+            <div class="alert alert-info mb-0">No Approved Staff.</div>
             {% endif %}
         </div>
     </div>

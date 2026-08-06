@@ -62,21 +62,13 @@ def browse_treks():
         )
 
     if difficulty:
-        query = query.filter_by(
-            difficulty=difficulty
-        )
+        query = query.filter_by(difficulty=difficulty)
 
     if status:
-        query = query.filter_by(
-            status=status
-        )
+        query = query.filter_by(status=status)
 
     treks = query.all()
-
-    return render_template(
-        "participant/browse_treks.html",
-        treks=treks
-    )
+    return render_template("participant/browse_treks.html", treks=treks)
 
 
 @participant.route("/trek/<int:trek_id>")
@@ -87,10 +79,7 @@ def trek_details(trek_id):
 
     trek = Trek.query.get_or_404(trek_id)
 
-    return render_template(
-        "participant/trek_details.html",
-        trek=trek
-    )
+    return render_template("participant/trek_details.html", trek=trek)
 
 
 @participant.route("/book/<int:trek_id>")
@@ -102,46 +91,18 @@ def book_trek(trek_id):
     trek = Trek.query.get_or_404(trek_id)
 
     if trek.status != "Open":
-        flash(
-            "Booking is closed.",
-            "danger"
-        )
-
-        return redirect(
-            url_for(
-                "participant.trek_details",
-                trek_id=trek.id
-            )
-        )
+        flash("Booking is closed.","danger")
+        return redirect(url_for("participant.trek_details", trek_id=trek.id))
 
     if trek.available_slots <= 0:
-        flash(
-            "No Slots Available.",
-            "danger"
-        )
+        flash("No Slots Available.", "danger")
+        return redirect(url_for("participant.trek_details", trek_id=trek.id))
 
-        return redirect(
-            url_for(
-                "participant.trek_details",
-                trek_id=trek.id
-            )
-        )
-
-    already_booked = Booking.query.filter_by(
-        participant_id=session["user_id"],
-        trek_id=trek.id
-    ).first()
+    already_booked = Booking.query.filter_by(participant_id=session["user_id"], trek_id=trek.id).first()
 
     if already_booked:
-        flash(
-            "You already booked this trek.",
-            "warning"
-        )
-        return redirect(
-            url_for(
-                "participant.my_bookings"
-            )
-        )
+        flash("You already booked this trek.", "warning")
+        return redirect(url_for("participant.my_bookings"))
 
     booking = Booking(
         participant_id=session["user_id"],
@@ -153,14 +114,9 @@ def book_trek(trek_id):
     trek.available_slots -= 1
     db.session.commit()
 
-    flash(
-        "Trek Booked Successfully!",
-        "success"
-    )
+    flash("Trek Booked Successfully!", "success")
 
-    return redirect(
-        url_for("participant.my_bookings")
-    )
+    return redirect(url_for("participant.my_bookings"))
 
 
 
@@ -170,14 +126,9 @@ def my_bookings():
     if not login_required():
         return redirect(url_for("auth.login"))
 
-    bookings = Booking.query.filter_by(
-        participant_id=session["user_id"]
-    ).all()
+    bookings = Booking.query.filter_by(participant_id=session["user_id"]).all()
 
-    return render_template(
-        "participant/my_bookings.html",
-        bookings=bookings
-    )
+    return render_template("participant/my_bookings.html", bookings=bookings)
 
 
 @participant.route("/cancel-booking/<int:booking_id>")
@@ -212,10 +163,7 @@ def profile():
 
     user = User.query.get_or_404(session["user_id"])
 
-    return render_template(
-        "participant/profile.html",
-        user=user
-    )
+    return render_template("participant/profile.html", user=user)
 
 @participant.route("/profile/update", methods=["POST"])
 def update_profile():
@@ -229,10 +177,7 @@ def update_profile():
 
     db.session.commit()
 
-    flash(
-        "Profile Updated Successfully.",
-        "success"
-    )
+    flash("Profile Updated Successfully.", "success")
 
     return redirect(url_for("participant.profile"))
 

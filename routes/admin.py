@@ -2,7 +2,9 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 from models import db
 from models.user import User
 from models.trek import Trek
+from datetime import datetime
 from models.booking import Booking
+from sqlalchemy import or_
 
 admin = Blueprint("admin", __name__)
 
@@ -26,17 +28,17 @@ def dashboard():
 
     total_treks = Trek.query.count()
     total_users = User.query.filter_by(role="Participant").count()
-    total_staff = User.query.filter_by(role="Trek_staff").count()
-    pending_Trek_staffs = User.query.filter_by(role="Trek_staff", approved=False ).count()
+    approved_staff = User.query.filter_by(role="Trek_staff", approved=True).count()
+    pending_Trek_staffs = User.query.filter_by(role="Trek_staff", approved=False).count()
     total_bookings = Booking.query.count()
     recent_treks = Trek.query.order_by(Trek.id.desc() ).limit(5).all()
     recent_bookings = Booking.query.order_by(Booking.id.desc() ).limit(5).all()
-
+    
     return render_template(
         "admin/dashboard.html",
         total_treks=total_treks,
         total_users=total_users,
-        total_staff=total_staff,
+        approved_staff=approved_staff,
         pending_Trek_staffs=pending_Trek_staffs,
         total_bookings=total_bookings,
         recent_treks=recent_treks,
@@ -48,42 +50,33 @@ def manage_treks():
     if not admin_required():
         return redirect(url_for("auth.login"))
 
-    treks = Trek.query.order_by(Trek.id.desc()).all()
+    search = request.args.get("search", "")
+
+    query = Trek.query
+
+    if search:
+        query = query.filter(
+            or_(
+                Trek.title.ilike(f"%{search}%"),
+                Trek.location.ilike(f"%{search}%")
+            )
+        )
+    treks = query.order_by(Trek.id.desc()).all()
 
     return render_template("admin/manage_trek.html", treks=treks)
-
+    
 @admin.route("/admin/staff")
 def staff_requests():
     if not admin_required():
         return redirect(url_for("auth.login"))
 
-    staff=User.query.filter_by(role="staff").all()
+    staff=User.query.filter_by(role="Trek_staff", approved=True).all()
 
     return render_template(
         "admin/approve_staff.html",
         staff=staff
     )
 
-@admin.route("/admin/users")
-def users():
-    if not admin_required():
-        return redirect(url_for("auth.login"))
-
-    users=User.query.filter_by(role="Participant").all()
-
-    return render_template(
-        "admin/manage_users.html",
-        users=users
-    )
-
-@admin.route("/admin/bookings")
-def bookings():
-    if not admin_required():
-        return redirect(url_for("auth.login"))
-
-    bookings = Booking.query.order_by(Booking.id.desc()).all()
-
-    return render_template("admin/bookings.html", bookings=bookings)
 
 @admin.route("/admin/create-trek", methods=["GET", "POST"])
 def create_trek():
@@ -91,25 +84,31 @@ def create_trek():
     if not admin_required():
         return redirect(url_for("auth.login"))
 
-    staff = User.query.filter_by(role="Trek_staff", approved=True).all()
+    search = request.args.get("search", "")
 
+    query = User.query.filter_by(role="Trek_staff", approved=True, blacklisted=False)
+
+    if search:
+        query = query.filter(User.name.ilike(f"%{search}%"))
+
+    staff = query.all()
     if request.method == "POST":
-
         trek = Trek(
             title=request.form["title"],
+            image=request.form["image"],
             state=request.form["state"],
             location=request.form["location"],
             difficulty=request.form["difficulty"],
-            duration=request.form["duration"],
-            altitude=request.form["altitude"],
-            registration_deadline=request.form["registration_deadline"],
+            duration=int(request.form["duration"]),
+            altitude=int(request.form["altitude"]) if request.form["altitude"] else None,
+            registration_deadline=datetime.strptime(request.form["registration_deadline"], "%Y-%m-%d").date(),
             description=request.form["description"],
-            start_date=request.form["start_date"],
-            end_date=request.form["end_date"],
-            capacity=request.form["capacity"],
-            available_slots=request.form["capacity"],
-            price=request.form["price"],
-            Trek_staff_id=request.form["Trek_staff_id"],
+            start_date=datetime.strptime(request.form["start_date"], "%Y-%m-%d").date(),
+            end_date=datetime.strptime(request.form["end_date"], "%Y-%m-%d").date(),
+            capacity=int(request.form["capacity"]),
+            available_slots=int(request.form["capacity"]),
+            price=int(request.form["price"]),
+            Trek_staff_id=int(request.form["staff_id"]),
             status=request.form["status"]
         )
 
@@ -139,20 +138,21 @@ def edit_trek(trek_id):
 
     if request.method == "POST":
 
-        trek.title=request.form["title"]
-        trek.state=request.form["state"]
-        trek.location=request.form["location"]
-        trek.difficulty=request.form["difficulty"]
-        trek.duration=request.form["duration"]
-        trek.altitude=request.form["altitude"]
-        trek.registration_deadline=request.form["registration_deadline"]
-        trek.description=request.form["description"]
-        trek.start_date=request.form["start_date"]
-        trek.end_date=request.form["end_date"]
-        trek.capacity=request.form["capacity"]
-        trek.price=request.form["price"]
-        trek.Trek_staff_id=request.form["Trek_staff_id"]
-        trek.status=request.form["status"]
+        trek.title = request.form["title"]
+        trek.image = request.form["image"]
+        trek.state = request.form["state"]
+        trek.location = request.form["location"]
+        trek.difficulty = request.form["difficulty"]
+        trek.duration = int(request.form["duration"])
+        trek.altitude = int(request.form["altitude"]) if request.form["altitude"] else None
+        trek.registration_deadline = datetime.strptime(request.form["registration_deadline"], "%Y-%m-%d").date()
+        trek.description = request.form["description"]
+        trek.start_date = datetime.strptime(request.form["start_date"], "%Y-%m-%d").date()
+        trek.end_date = datetime.strptime(request.form["end_date"],"%Y-%m-%d").date()
+        trek.capacity = int(request.form["capacity"])
+        trek.price = int(request.form["price"])
+        trek.Trek_staff_id = int(request.form["staff_id"])
+        trek.status = request.form["status"]
 
         db.session.commit()
 
@@ -181,12 +181,23 @@ def approve_staff():
     if not admin_required():
         return redirect(url_for("auth.login"))
 
-    staff = User.query.filter_by(
+    pending_staff = User.query.filter_by(
         role="Trek_staff",
-        approved=False, blacklisted=False
+        approved=False,
+        blacklisted=False
     ).all()
 
-    return render_template("admin/approve_staff.html", staff=staff)
+    approved_staff = User.query.filter_by(
+        role="Trek_staff",
+        approved=True,
+        blacklisted=False
+    ).all()
+
+    return render_template(
+        "admin/approve_staff.html",
+        pending_staff=pending_staff,
+        approved_staff=approved_staff
+    )
 
 @admin.route("/admin/approve/<int:user_id>")
 def approve(user_id):
@@ -239,8 +250,12 @@ def manage_users():
     search = request.args.get("search")
 
     if search:
-        users = User.query.filter(User.role == "Participant", 
-                User.name.contains(search)).all()
+        users = User.query.filter(
+        User.role == "Participant",
+        or_(
+            User.name.ilike(f"%{search}%"),
+            User.email.ilike(f"%{search}%")
+        )).all()
     else:
         users = User.query.filter_by(role="Participant").all()
 
@@ -265,6 +280,20 @@ def bookings():
     if not admin_required():
         return redirect(url_for("auth.login"))
 
-    bookings = Booking.query.order_by(Booking.id.desc()).all()
+    search = request.args.get("search", "")
+    query = Booking.query
+
+    if search:
+        query = query.join(User).join(Trek).filter(
+
+            or_(
+                User.name.ilike(f"%{search}%"),
+                Trek.title.ilike(f"%{search}%")
+            )
+        )
+
+    bookings = query.order_by(
+        Booking.id.desc()
+    ).all()
 
     return render_template("admin/bookings.html", bookings=bookings)

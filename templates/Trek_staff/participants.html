@@ -1,0 +1,73 @@
+{% extends "layouts/dashboard_base.html" %}
+
+{% block title %}
+Participants
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold">
+                Participants
+            </h2>
+
+            <p class="text-muted">
+                {{ trek.title }}
+            </p>
+        </div>
+
+        <a href="{{ url_for('Trek_staff.my_treks') }}"
+           class="btn btn-secondary">
+            Back
+        </a>
+    </div>
+
+    <div class="card shadow border-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-success">
+
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Booking Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                {% if bookings %}
+                    {% for booking in bookings %}
+
+                    <tr>
+                        <td>{{ booking.id }}</td>
+                        <td>{{ booking.user.name }}</td>
+                        <td>{{ booking.user.email }}</td>
+                        <td>{{ booking.user.phone }}</td>
+
+                        <td>
+                            {{ booking.booking_date.strftime('%d-%m-%Y') }}
+                        </td>
+
+                        <td>
+                            <span class="badge bg-success">{{ booking.status }}</span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+                {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center">No Participants Yet.</td>
+                    </tr>
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
