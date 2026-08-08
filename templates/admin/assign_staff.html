@@ -7,38 +7,38 @@ Assign Staff
 {% block content %}
 
 <div class="container-fluid">
-    <div class="card shadow">
+    <div class="card shadow border-0">
         <div class="card-header bg-info text-white">
-            <h3>Assign Staff To Trek</h3>
+            <h3 class="mb-0">Assign Trek Staff</h3>
         </div>
 
         <div class="card-body">
             <form method="POST">
-
-                <!-- Trek -->
-
                 <div class="mb-3">
                     <label class="form-label">Select Trek</label>
 
                     <select class="form-select" name="trek_id" required>
-
+                        <option value="">None</option>
                         {% for trek in treks %}
                         <option value="{{ trek.id }}">{{ trek.title }}</option>
                         {% endfor %}
                     </select>
                 </div>
 
-                <!-- Staff -->
 
                 <div class="mb-4">
                     <label class="form-label">Select Staff</label>
 
                     <select class="form-select" name="staff_id" required>
+                        <option value="">None</option>
                         {% for member in staff %}
-                        <option value="{{ member.id }}">{{ member.name }}</option>
+                        <option value="{{ member.id }}">
+                            {{ member.name }}
+                        </option>
                         {% endfor %}
                     </select>
                 </div>
+
                 <button class="btn btn-primary">Assign Staff</button>
             </form>
         </div>
@@ -46,39 +46,44 @@ Assign Staff
 
     <br>
 
-    <div class="card shadow">
-        <div class="card-header">
-            <h4>Current Assignments</h4>
+    <div class="card shadow border-0">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Current Assignments</h4>
         </div>
 
         <div class="card-body">
-            <table class="table table-bordered table-hover">
-                <thead class="table-dark">
-                    <tr>
-                        <th>ID</th>
-                        <th>Trek</th>
-                        <th>Assigned Staff</th>
-                    </tr>
-                </thead>
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Trek</th>
+                            <th>Location</th>
+                            <th>Status</th>
+                            <th>Assigned Staff</th>
+                        </tr>
+                    </thead>
 
-                <tbody>
-                    {% for trek in treks %}
-                    <tr>
-                        <td>{{ trek.id }}</td>
-                        <td>{{ trek.title }}</td>
-                        <td>
-                            {% if trek.Trek_staff %}
-                                {{ trek.Trek_staff.name }}
-                            {% else %}
-                                Not Assigned
-                            {% endif %}
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                    <tbody>
+                        {% for trek in treks %}
+                        <tr>
+                            <td>{{ trek.id }}</td>
+                            <td>{{ trek.title }}</td>
+                            <td>{{ trek.location }}</td>
+                            <td>{{ trek.status }}</td>
+                            <td>
+                                {% if trek.staff %}
+                                    {{ trek.staff.name }}
+                                {% else %}
+                                    <span class="text-danger">Not Assigned</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
-
 {% endblock %}

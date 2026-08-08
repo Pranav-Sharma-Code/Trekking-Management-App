@@ -226,19 +226,18 @@ def blacklist(user_id):
 
 @admin.route("/admin/assign-staff", methods=["GET", "POST"])
 def assign_staff():
-    if not admin_required():
-        return redirect(url_for("auth.login"))
-
     treks = Trek.query.all()
     staff = User.query.filter_by(role="Trek_staff", approved=True, blacklisted=False).all()
 
     if request.method == "POST":
-        trek = Trek.query.get(request.form["trek_id"])
-        trek.Trek_staff_id = request.form["staff_id"]
+        trek = Trek.query.get(int(request.form["trek_id"]))
+        trek.Trek_staff_id = int(request.form["staff_id"])
+
         db.session.commit()
         flash("Staff Assigned Successfully!", "success")
 
         return redirect(url_for("admin.assign_staff"))
+
     return render_template("admin/assign_staff.html", treks=treks, staff=staff)
 
 @admin.route("/admin/manage-users")

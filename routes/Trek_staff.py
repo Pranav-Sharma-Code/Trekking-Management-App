@@ -54,7 +54,7 @@ def my_treks():
 
     treks = Trek.query.filter_by(Trek_staff_id=session["user_id"]).all()
 
-    return render_template("Trek_staff/my_treks.html", mtreks=treks)
+    return render_template("Trek_staff/my_treks.html", treks=treks)
 
 
 @Trek_staff.route("/participants/<int:trek_id>")
@@ -82,37 +82,32 @@ def edit_trek(id):
 
     trek = Trek.query.get_or_404(id)
 
+    # Staff can edit only their assigned trek
     if trek.Trek_staff_id != session["user_id"]:
         flash("Unauthorized Access!", "danger")
         return redirect(url_for("Trek_staff.my_treks"))
 
     if request.method == "POST":
 
-        trek.title = request.form["title"]
-        trek.image = request.form["image"]
-        trek.state = request.form["state"]
-        trek.location = request.form["location"]
-        trek.description = request.form["description"]
-        trek.difficulty = request.form["difficulty"]
-        trek.duration = int(request.form["duration"])
-        trek.altitude = int(request.form["altitude"]) if request.form["altitude"] else None
-        trek.registration_deadline = datetime.strptime(request.form["registration_deadline"], "%Y-%m-%d").date()
-        trek.start_date = datetime.strptime(request.form["start_date"], "%Y-%m-%d").date()
-        trek.end_date = datetime.strptime(request.form["end_date"], "%Y-%m-%d").date()
-        trek.capacity = int(request.form["capacity"])
-        trek.available_slots = int(request.form["capacity"])
-        trek.price = int(request.form["price"])
+        available_slots = int(request.form["available_slots"])
+
+        if available_slots > trek.capacity:
+            flash("Available slots cannot be greater than capacity.", "danger")
+            return redirect(url_for("Trek_staff.edit_trek", id=trek.id))
+
+        if available_slots < 0:
+            flash("Available slots cannot be negative.", "danger")
+            return redirect(url_for("Trek_staff.edit_trek", id=trek.id))
+
+        trek.available_slots = available_slots
         trek.status = request.form["status"]
 
         db.session.commit()
-        flash("Trek Updated Successfully!", "success")
 
+        flash("Trek Updated Successfully!", "success")
         return redirect(url_for("Trek_staff.my_treks"))
 
-    return render_template(
-        "Trek_staff/edit_trek.html",
-        trek=trek
-    )
+    return render_template("Trek_staff/edit_trek.html", trek=trek)
 
 
 @Trek_staff.route("/delete-trek/<int:id>")

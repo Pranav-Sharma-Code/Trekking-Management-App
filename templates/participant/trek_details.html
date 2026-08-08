@@ -49,86 +49,86 @@
                     <div class="row">
                         <div class="col-md-6">
                             <p>
-                                📍 <strong>Location</strong><br>
+                                <strong>Location</strong><br>
                                 {{ trek.location }}
                             </p>
                         </div>
 
                         <div class="col-md-6">
                             <p>
-                                🗺️ <strong>State</strong><br>
+                                <strong>State</strong><br>
                                 {{ trek.state }}
                             </p>
                         </div>
 
                         <div class="col-md-6">
                             <p>
-                                🥾 <strong>Difficulty</strong><br>
+                                <strong>Difficulty</strong><br>
                                 {{ trek.difficulty }}
                             </p>
                         </div>
 
                         <div class="col-md-6">
                             <p>
-                                ⛰️ <strong>Altitude</strong><br>
+                                <strong>Altitude</strong><br>
                                 {{ trek.altitude }} m
                             </p>
                         </div>
 
                         <div class="col-md-6">
                             <p>
-                                ⏳ <strong>Duration</strong><br>
+                                <strong>Duration</strong><br>
                                 {{ trek.duration }} Days
                             </p>
                         </div>
 
                         <div class="col-md-6">
                             <p>
-                                👥 <strong>Capacity</strong><br>
+                                <strong>Capacity</strong><br>
                                 {{ trek.capacity }}
                             </p>
                         </div>
 
                         <div class="col-md-6">
                             <p>
-                                ✅ <strong>Available Slots</strong><br>
+                                <strong>Available Slots</strong><br>
                                 {{ trek.available_slots }}
                             </p>
                         </div>
 
                         <div class="col-md-6">
                             <p>
-                                💰 <strong>Price</strong><br>
+                                <strong>Price</strong><br>
                                 ₹ {{ trek.price }}
                             </p>
                         </div>
 
                         <div class="col-md-6">
                             <p>
-                                📅 <strong>Start Date</strong><br>
+                                <strong>Start Date</strong><br>
                                 {{ trek.start_date }}
                             </p>
                         </div>
 
                         <div class="col-md-6">
                             <p>
-                                🏁 <strong>End Date</strong><br>
+                                <strong>End Date</strong><br>
                                 {{ trek.end_date }}
                             </p>
                         </div>
 
                         <div class="col-md-6">
                             <p>
-                                ⌛ <strong>Registration Deadline</strong><br>
+                                <strong>Registration Deadline</strong><br>
                                 {{ trek.registration_deadline }}
                             </p>
                         </div>
                         
                         <div class="col-md-6">
                             <p>
-                                👨‍💼 <strong>Organizer</strong><br>
-                                {% if trek.organizer %}
-                                    {{ trek.organizer.name }}
+                                <strong>staff</strong><br>
+                                {% if trek.staff %}
+                                    {{ trek.staff.name }}
                                 {% else %}
                                     Not Assigned
                                 {% endif %}
@@ -144,7 +144,7 @@
                     {% if trek.status=="Open" and trek.available_slots>0 %}
                     <a href="{{ url_for('participant.book_trek', trek_id=trek.id) }}"
                        class="btn btn-success btn-lg">
-                        🥾 Book Trek
+                        Book Trek
                     </a>
                     {% else %}
                     <button class="btn btn-secondary btn-lg" disabled>Trek Not Available</button>

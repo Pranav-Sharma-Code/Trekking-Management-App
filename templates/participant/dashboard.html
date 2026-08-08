@@ -6,19 +6,79 @@ Participant Dashboard
 
 {% block content %}
 
-<h2>
-    Welcome
-    {{ session.get("name") }}
-</h2>
+<div class="container-fluid">
+    <div class="mb-4">
+        <h2 class="fw-bold">Participant Dashboard</h2>
+        <p class="text-muted">
+            Welcome {{ session.get("name") }}
+        </p>
+    </div>
 
-<div class="row mt-4">
-    <div class="col-md-4">
-        <div class="dashboard-card">
-            <i class="bi bi-map"></i>
-            <h4>Available Treks</h4>
-            <h1>{{ total_treks }}</h1>
+    <!-- Statistics -->
+
+    <div class="row g-4">
+        <div class="col-lg-4 col-md-6">
+            <div class="card shadow border-0">
+                <div class="card-body text-center">
+                    <h1 class="text-primary">{{ total_treks }}</h1>
+                    <h5>Available Treks</h5>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-lg-4 col-md-6">
+            <div class="card shadow border-0">
+                <div class="card-body text-center">
+                    <h1 class="text-success">{{ my_bookings }}</h1>
+                    <h5>My Bookings</h5>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-lg-4 col-md-12">
+            <div class="card shadow border-0">
+                <div class="card-body text-center">
+                    <h1 class="text-warning">{{ my_completed }}</h1>
+                    <h5>Completed Treks</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Quick Actions -->
+
+    <div class="card shadow border-0 mt-5">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Quick Actions</h5>
+        </div>
+
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4 d-grid mb-3">
+                    <a href="{{ url_for('participant.browse_treks') }}"
+                       class="btn btn-primary btn-lg">
+                        Browse Treks
+                    </a>
+                </div>
+
+                <div class="col-md-4 d-grid mb-3">
+                    <a href="{{ url_for('participant.my_bookings') }}"
+                       class="btn btn-success btn-lg">
+                        My Bookings
+                    </a>
+                </div>
+
+                <div class="col-md-4 d-grid mb-3">
+                    <a href="{{ url_for('participant.profile') }}"
+                       class="btn btn-warning btn-lg">
+                        My Profile
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-
 {% endblock %}

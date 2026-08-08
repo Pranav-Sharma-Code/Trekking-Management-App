@@ -1,108 +1,84 @@
 {% extends "layouts/dashboard_base.html" %}
 
 {% block title %}
-Edit Trek
+Update Trek
 {% endblock %}
 
 {% block content %}
 
-<div class="card shadow-lg border-0">
-    <div class="card-header bg-warning text-dark">
-        <h3>
-            <i class="bi bi-pencil-square"></i>
-            Edit Trek
-        </h3>
-        <small>Update the trek information.</small>
+<div class="container-fluid">
+    <div class="mb-4">
+        <h2 class="fw-bold">✏️ Update Trek</h2>
+        <p class="text-muted">
+            Update trek availability and status
+        </p>
     </div>
 
-    <div class="card-body">
-        <form method="POST">
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Trek Title</label>
-                    <input type="text" name="title" class="form-control"
-                        value="{{ trek.title }}" required>
+    <div class="card shadow border-0">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">{{ trek.title }}</h4>
+        </div>
+
+        <div class="card-body">
+            <!-- Trek Information -->
+
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <p>
+                        <strong>Location</strong><br>
+                        {{ trek.location }}
+                    </p>
                 </div>
 
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Location</label>
-                    <input type="text" name="location" class="form-control"
-                        value="{{ trek.location }}" required>
+                <div class="col-md-6">
+                    <p>
+                        <strong>Capacity</strong><br>
+                        {{ trek.capacity }}
+                    </p>
                 </div>
-
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Difficulty</label>
-                    <select name="difficulty" class="form-select">
-                        <option value="Easy"
-                        {% if trek.difficulty=="Easy" %}selected{% endif %}>
-                        Easy
-                        </option>
-
-                        <option value="Moderate"
-                        {% if trek.difficulty=="Moderate" %}selected{% endif %}>
-                        Moderate
-                        </option>
-
-                        <option value="Hard"
-                        {% if trek.difficulty=="Hard" %}selected{% endif %}>
-                        Hard
-                        </option>
-
-                    </select>
-
-                </div>
-
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Price</label>
-
-                    <input type="number" name="price" class="form-control"
-                        value="{{ trek.price }}" required>
-
-                </div>
-
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Capacity</label>
-                    <input type="number" name="capacity" class="form-control"
-                        value="{{ trek.capacity }}" required>
-
-                </div>
-
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Start Date</label>
-
-                    <input type="date" name="start_date" class="form-control"
-                        value="{{ trek.start_date }}" required>
-
-                </div>
-
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">End Date</label>
-                    <input type="date" name="end_date" class="form-control"
-                        value="{{ trek.end_date }}" required>
-
-                </div>
-                <div class="col-12 mb-4">
-                    <label class="form-label">
-                        Description
-                    </label>
-
-                    <textarea rows="5" name="description"
-                        class="form-control">{{ trek.description }}</textarea>
-
-                </div>
-
             </div>
 
-            <button class="btn btn-warning">
-                <i class="bi bi-check-circle"></i>
-                Update Trek
-            </button>
 
-            <a href="/my-treks"
-               class="btn btn-secondary">
-                Cancel
-            </a>
-        </form>
+            <form method="POST">
+                <!-- Available Slots -->
+
+                <div class="mb-4">
+                    <label class="form-label">Available Slots</label>
+
+                    <input type="number" class="form-control" name="available_slots"
+                        value="{{ trek.available_slots }}" min="0" max="{{ trek.capacity }}"
+                        required>
+
+                    <small class="text-muted">Maximum capacity: {{ trek.capacity }}</small>
+                </div>
+
+
+                <!-- Trek Status -->
+
+                <div class="mb-4">
+
+                    <label class="form-label">Trek Status</label>
+
+                    <select class="form-select" name="status" required>
+                        <option value="Open" {% if trek.status == "Open" %}selected{% endif %}>
+                            Open
+                        </option>
+
+                        <option value="Closed" {% if trek.status == "Closed" %}selected{% endif %}>
+                            Closed
+                        </option>
+                    </select>
+                </div>
+
+
+                <!-- Buttons -->
+
+                <div class="d-flex justify-content-between">
+                    <a href="{{ url_for('Trek_staff.my_treks') }}" class="btn btn-secondary">Back</a>
+                    <button type="submit" class="btn btn-primary">Update Trek</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 

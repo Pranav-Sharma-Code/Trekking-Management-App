@@ -43,7 +43,8 @@ Edit Trek
 
                         <select class="form-select" name="difficulty">
                             <option value="Easy" {% if trek.difficulty=="Easy" %}selected{% endif %}>Easy</option>
-                            <option value="Moderate" {% if trek.difficulty=="Moderate" %}selected{% endif %}>Moderate</option>
+                            <option value="Moderate" {% if trek.difficulty=="Moderate" %}selected{% endif %}>Moderate
+                            </option>
                             <option value="Hard" {% if trek.difficulty=="Hard" %}selected{% endif %}>Hard</option>
                         </select>
                     </div>
@@ -66,7 +67,8 @@ Edit Trek
 
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Registration Deadline</label>
-                        <input type="date" class="form-control" name="registration_deadline" value="{{ trek.registration_deadline }}" required>
+                        <input type="date" class="form-control" name="registration_deadline"
+                            value="{{ trek.registration_deadline }}" required>
 
                     </div>
 
@@ -74,7 +76,8 @@ Edit Trek
 
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Start Date</label>
-                        <input type="date" class="form-control" name="start_date" value="{{ trek.start_date }}" required>
+                        <input type="date" class="form-control" name="start_date" value="{{ trek.start_date }}"
+                            required>
                     </div>
 
                     <!-- End Date -->
@@ -94,7 +97,8 @@ Edit Trek
 
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Available Slots</label>
-                        <input type="number" class="form-control" name="available_slots" value="{{ trek.available_slots }}" required>
+                        <input type="number" class="form-control" name="available_slots"
+                            value="{{ trek.available_slots }}" required>
                     </div>
 
                     <!-- Price -->
@@ -109,9 +113,9 @@ Edit Trek
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Assign Staff</label>
 
-                        <select class="form-select" name="organizer_id">
+                        <select class="form-select" name="staff_id" required>
                             {% for member in staff %}
-                            <option value="{{ member.id }}" {% if trek.organizer_id==member.id %}selected{% endif %}>
+                            <option value="{{ member.id }}" {% if trek.Trek_staff_id==member.id %}selected{% endif %}>
                                 {{ member.name }}
                             </option>
                             {% endfor %}
@@ -127,7 +131,8 @@ Edit Trek
                             <option value="Pending" {% if trek.status=="Pending" %}selected{% endif %}>Pending</option>
                             <option value="Open" {% if trek.status=="Open" %}selected{% endif %}>Open</option>
                             <option value="Closed" {% if trek.status=="Closed" %}selected{% endif %}>Closed</option>
-                            <option value="Completed" {% if trek.status=="Completed" %}selected{% endif %}>Completed</option>
+                            <option value="Completed" {% if trek.status=="Completed" %}selected{% endif %}>Completed
+                            </option>
                         </select>
                     </div>
 
