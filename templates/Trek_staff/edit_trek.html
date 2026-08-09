@@ -45,9 +45,8 @@ Update Trek
                 <div class="mb-4">
                     <label class="form-label">Available Slots</label>
 
-                    <input type="number" class="form-control" name="available_slots"
-                        value="{{ trek.available_slots }}" min="0" max="{{ trek.capacity }}"
-                        required>
+                    <input type="number" class="form-control" name="available_slots" value="{{ trek.available_slots }}"
+                        min="0" max="{{ trek.capacity }}" required>
 
                     <small class="text-muted">Maximum capacity: {{ trek.capacity }}</small>
                 </div>
@@ -55,17 +54,14 @@ Update Trek
 
                 <!-- Trek Status -->
 
-                <div class="mb-4">
-
+                <div class="col-md-6 mb-3">
                     <label class="form-label">Trek Status</label>
 
-                    <select class="form-select" name="status" required>
-                        <option value="Open" {% if trek.status == "Open" %}selected{% endif %}>
-                            Open
-                        </option>
-
-                        <option value="Closed" {% if trek.status == "Closed" %}selected{% endif %}>
-                            Closed
+                    <select class="form-select" name="status">
+                        <option value="Pending" {% if trek.status=="Pending" %}selected{% endif %}>Pending</option>
+                        <option value="Open" {% if trek.status=="Open" %}selected{% endif %}>Open</option>
+                        <option value="Closed" {% if trek.status=="Closed" %}selected{% endif %}>Closed</option>
+                        <option value="Completed" {% if trek.status=="Completed" %}selected{% endif %}>Completed
                         </option>
                     </select>
                 </div>

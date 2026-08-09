@@ -24,17 +24,33 @@ def dashboard():
     if not login_required():
         return redirect(url_for("auth.login"))
 
+    user_id = session["user_id"]
     total_treks = Trek.query.filter_by(status="Open").count()
+    my_bookings = (
+        Booking.query
+        .join(Trek, Booking.trek_id == Trek.id)
+        .filter(
+            Booking.participant_id == user_id,
+            Trek.status != "Completed",
+            Booking.status == "Booked"
+        ).count()
+    )
 
-    my_bookings = Booking.query.filter_by(participant_id=session["user_id"], status="Booked").count()
-
-    my_completed = Booking.query.filter_by(participant_id=session["user_id"], status="Completed").count()
+    completed_treks = (
+        Booking.query
+        .join(Trek, Booking.trek_id == Trek.id)
+        .filter(
+            Booking.participant_id == user_id,
+            Trek.status == "Completed",
+            Booking.status == "Booked"
+        ).count()
+    )
 
     return render_template(
         "participant/dashboard.html",
         total_treks=total_treks,
         my_bookings=my_bookings,
-        my_completed=my_completed
+        completed_treks=completed_treks
     )
 
 
@@ -85,6 +101,12 @@ def book_trek(trek_id):
 
     if not login_required():
         return redirect(url_for("auth.login"))
+
+    user = User.query.get_or_404(session["user_id"])
+
+    if user.blacklisted:
+        flash("Your account has been blacklisted. You cannot book a trek.", "danger")
+        return redirect(url_for("participant.browse_treks"))
 
     trek = Trek.query.get_or_404(trek_id)
 

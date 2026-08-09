@@ -181,23 +181,11 @@ def approve_staff():
     if not admin_required():
         return redirect(url_for("auth.login"))
 
-    pending_staff = User.query.filter_by(
-        role="Trek_staff",
-        approved=False,
-        blacklisted=False
-    ).all()
+    pending_staff = User.query.filter_by(role="Trek_staff", approved=False, blacklisted=False).all()
 
-    approved_staff = User.query.filter_by(
-        role="Trek_staff",
-        approved=True,
-        blacklisted=False
-    ).all()
+    approved_staff = User.query.filter_by( role="Trek_staff", approved=True, blacklisted=False ).all()
 
-    return render_template(
-        "admin/approve_staff.html",
-        pending_staff=pending_staff,
-        approved_staff=approved_staff
-    )
+    return render_template("admin/approve_staff.html", pending_staff=pending_staff, approved_staff=approved_staff)
 
 @admin.route("/admin/approve/<int:user_id>")
 def approve(user_id):
@@ -226,12 +214,22 @@ def blacklist(user_id):
 
 @admin.route("/admin/assign-staff", methods=["GET", "POST"])
 def assign_staff():
+
+    if not admin_required():
+        return redirect(url_for("auth.login"))
+
     treks = Trek.query.all()
     staff = User.query.filter_by(role="Trek_staff", approved=True, blacklisted=False).all()
 
     if request.method == "POST":
-        trek = Trek.query.get(int(request.form["trek_id"]))
-        trek.Trek_staff_id = int(request.form["staff_id"])
+        trek = Trek.query.get_or_404(int(request.form["trek_id"]))
+        staff_member = User.query.filter_by(id=int(request.form["staff_id"]), role="Trek_staff", approved=True, blacklisted=False).first()
+
+        if not staff_member:
+            flash("This staff member is not eligible for assignment.", "danger")
+            return redirect(url_for("admin.assign_staff"))
+
+        trek.Trek_staff_id = staff_member.id
 
         db.session.commit()
         flash("Staff Assigned Successfully!", "success")
@@ -280,19 +278,17 @@ def bookings():
         return redirect(url_for("auth.login"))
 
     search = request.args.get("search", "")
-    query = Booking.query
+    query = Booking.query.join(User, Booking.participant_id == User.id).join(Trek, Booking.trek_id == Trek.id)
+    query = query.filter(User.blacklisted == False)
 
     if search:
-        query = query.join(User).join(Trek).filter(
-
+        query = query.filter(
             or_(
                 User.name.ilike(f"%{search}%"),
                 Trek.title.ilike(f"%{search}%")
             )
         )
 
-    bookings = query.order_by(
-        Booking.id.desc()
-    ).all()
+    bookings = query.order_by(Booking.id.desc()).all()
 
     return render_template("admin/bookings.html", bookings=bookings)
